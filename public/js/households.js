@@ -88,6 +88,9 @@ $(document).ready(function () {
           document.getElementById('edit_household_id').value = data.household.id;
           document.getElementById('edit_ownership').value = data.household.ownership_status;
 
+          // insert notes to text area
+          document.getElementById('edit_notes').value = data.household.notes;
+
           // Populate head dropdown
           const headDropdown = document.getElementById('edit_household_head_id');
           headDropdown.innerHTML = '';

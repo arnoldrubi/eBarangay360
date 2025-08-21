@@ -103,7 +103,7 @@
                     } ?>
                   </select>
                   <div class="col-md-2">
-                    <button type="button" class="btn btn-danger btn-sm remove-member">Remove</button>
+                    <button type="button" class="mt-2 btn btn-danger btn-sm remove-member"><i class="material-symbols-outlined md-18 text-light">contract_delete</i> Remove</button>
                   </div>
                 </div>
                 <div class="mb-3 resident-dropdown col-md-6">
@@ -122,7 +122,7 @@
             </div>
 
             <button type="button" class="btn btn-outline-primary" id="addMore">
-              <i class="fas fa-plus"></i> Add Member
+              <i class="material-symbols-outlined md-18 text-secondary">add_box</i> Add Member
             </button>
 
             <div class="mt-4">

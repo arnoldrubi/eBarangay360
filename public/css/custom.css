@@ -298,3 +298,16 @@ body{
 .residents-dashboard-card .material-symbols-outlined{
   color: #183153;
 }
+
+/* print styles*/
+#printable-page {
+  display: none;
+  /* opacity: 0.25;
+  pointer-events: none !important; */
+}
+
+@media print {
+  #printable-page {
+    display: block;
+  }
+}

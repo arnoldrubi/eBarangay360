@@ -5,10 +5,19 @@
     </div>
   </div>
       
+  <!-- Bootstrap JS -->
+  <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script> -->
+  
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+  <!-- Custom Scripts based on routes -->
   <script src="<?= BASE_URL ?>/js/common.js"></script>
   <?php if ($page === 'residents' || $page === 'add-resident') : ?>
   <script src="<?= BASE_URL ?>/js/residents.js"></script>
@@ -16,62 +25,69 @@
     <script src="<?= BASE_URL ?>js/blotter-reports.js"></script>
   <?php elseif ($page === 'households' || $page === 'add-household' || $page === 'add-household-members') : ?>
     <script src="<?= BASE_URL ?>js/households.js"></script>
+  <?php elseif ($page === 'barangay-certificates' || $page === 'barangay-clearance' || $page === 'barangay-certificate-of-indigency') : ?>
+  <script src="<?= BASE_URL ?>js/barangay-certificates.js"></script>
   <?php endif; ?>
 
+  <?php if ($page === 'add-household-members' || $page === 'households') : ?>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('addMore').addEventListener('click', function () {
+      const container = document.getElementById('resident-dropdown-group');
+      const clone = container.querySelector('.resident-dropdown').cloneNode(true);
+      clone.querySelector('select').value = ''; // clear selection
+      container.appendChild(clone);
+    });
+      document.addEventListener('click', function (e) {
+      
+        if (e.target.classList.contains('remove-member')) {
+          const deleteButtons = document.querySelectorAll('.resident-dropdown');
+          const group = e.target.closest('.resident-dropdown');
+          if (deleteButtons.length > 1) {
+            group.remove();
+          }
+        }
+      });
+
+      function updateResidentDropdowns() {
+        const selectedValues = [];
+
+        // Collect selected values
+        document.querySelectorAll('.resident-select').forEach(select => {
+          const val = select.value;
+          if (val) selectedValues.push(val);
+        });
+
+        // Disable selected options in all dropdowns
+        document.querySelectorAll('.resident-select').forEach(select => {
+          const currentValue = select.value;
+          Array.from(select.options).forEach(option => {
+            if (option.value === '') return; // skip placeholder
+            if (option.value !== currentValue && selectedValues.includes(option.value)) {
+              option.disabled = true;
+            } else {
+              option.disabled = false;
+            }
+          });
+        });
+      }
+
+      // Initial call
+      updateResidentDropdowns();
+
+      // Watch for change on any resident dropdown
+      document.addEventListener('change', function (e) {
+        if (e.target.classList.contains('resident-select')) {
+          updateResidentDropdowns();
+        }
+      });
+    });
+    </script>
+  <?php endif; ?>
+
+  
 
 <script>
-
-  document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('addMore').addEventListener('click', function () {
-    const container = document.getElementById('resident-dropdown-group');
-    const clone = container.querySelector('.resident-dropdown').cloneNode(true);
-    clone.querySelector('select').value = ''; // clear selection
-    container.appendChild(clone);
-  });
-    document.addEventListener('click', function (e) {
-    
-      if (e.target.classList.contains('remove-member')) {
-        const deleteButtons = document.querySelectorAll('.resident-dropdown');
-        const group = e.target.closest('.resident-dropdown');
-        if (deleteButtons.length > 1) {
-          group.remove();
-        }
-      }
-    });
-
-    function updateResidentDropdowns() {
-      const selectedValues = [];
-
-      // Collect selected values
-      document.querySelectorAll('.resident-select').forEach(select => {
-        const val = select.value;
-        if (val) selectedValues.push(val);
-      });
-
-      // Disable selected options in all dropdowns
-      document.querySelectorAll('.resident-select').forEach(select => {
-        const currentValue = select.value;
-        Array.from(select.options).forEach(option => {
-          if (option.value === '') return; // skip placeholder
-          if (option.value !== currentValue && selectedValues.includes(option.value)) {
-            option.disabled = true;
-          } else {
-            option.disabled = false;
-          }
-        });
-      });
-    }
-
-    // Initial call
-    updateResidentDropdowns();
-
-    // Watch for change on any resident dropdown
-    document.addEventListener('change', function (e) {
-      if (e.target.classList.contains('resident-select')) {
-        updateResidentDropdowns();
-      }
-    });
-  });
 
   document.addEventListener('click', function (e) {
   if (e.target.classList.contains('status-update')) {

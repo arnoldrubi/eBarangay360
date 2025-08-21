@@ -98,49 +98,49 @@
   </div>
 
   <!-- Table -->
-  <div class="table-responsive">
-    <table id="residents-table" class="table table-bordered align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Middle Name</th>
-          <th>Last Name</th>
-          <th>Zone (Purok)</th>
-          <th>Street</th>
-          <th>Gender</th>
-          <th>Age</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-        <?php
-
-          $stmt = $pdo->query("SELECT id, first_name, last_name, middle_name, date_of_birth, present_zone, present_street, gender, alive FROM residents WHERE is_deleted = 0");
-          while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $current_age = date_diff(date_create($row['date_of_birth']), date_create('today'))->y;
-          ?>
+    <div class="table-responsive">
+      <table id="residents-table" class="table table-bordered align-middle">
+        <thead class="table-light">
           <tr>
-            <td><?php echo $row['id']; ?></td>
-            <td><?php echo $row['first_name']; ?></td>
-            <td><?php echo $row['last_name']; ?></td>
-            <td><?php echo $row['middle_name']; ?></td>
-            <td><?php echo $row['present_zone']; ?></td>
-            <td><?php echo $row['present_street']; ?></td>
-            <td><?php echo $row['gender']; ?></td>
-            <td><?php echo $current_age; ?></td>
-            <td><?php echo $row['alive'] == 1 ? 'Alive': 'Deceased'; ?></td>
-            <td>
-              <a data-id="<?= $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#editResidentModal" href="#" class="btn btn-sm btn-warning text-white edit-btn" title="Edit"><i class="material-symbols-outlined md-18">edit</i></a>
-              <a data-id="<?= $row['id'] ?>" class="btn btn-sm btn-danger delete-btn"><i class="material-symbols-outlined md-18">delete</i></a>
-            </td>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Zone (Purok)</th>
+            <th>Street</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
-          <?php } ?>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          
+          <?php
+
+            $stmt = $pdo->query("SELECT id, first_name, last_name, middle_name, date_of_birth, present_zone, present_street, gender, alive FROM residents WHERE is_deleted = 0");
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+              $current_age = date_diff(date_create($row['date_of_birth']), date_create('today'))->y;
+            ?>
+            <tr>
+              <td><?php echo $row['id']; ?></td>
+              <td><?php echo $row['first_name']; ?></td>
+              <td><?php echo $row['last_name']; ?></td>
+              <td><?php echo $row['middle_name']; ?></td>
+              <td><?php echo $row['present_zone']; ?></td>
+              <td><?php echo $row['present_street']; ?></td>
+              <td><?php echo $row['gender']; ?></td>
+              <td><?php echo $current_age; ?></td>
+              <td><?php echo $row['alive'] == 1 ? 'Alive': 'Deceased'; ?></td>
+              <td>
+                <a data-id="<?= $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#editResidentModal" href="#" class="btn btn-sm btn-warning text-white edit-btn" title="Edit"><i class="material-symbols-outlined md-18">edit</i></a>
+                <a data-id="<?= $row['id'] ?>" class="btn btn-sm btn-danger delete-btn"><i class="material-symbols-outlined md-18">delete</i></a>
+              </td>
+            </tr>
+            <?php } ?>
+        </tbody>
+      </table>
+    </div>
   </div>
   </section>
 

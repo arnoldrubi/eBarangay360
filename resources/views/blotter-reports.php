@@ -1,18 +1,19 @@
 <?php
   require '../config/database.php';
+  require '../src/helpers/utilities.php';
 
   //Total pending reports
   $stmt = $pdo->query("SELECT COUNT(*) FROM blotter_reports WHERE status = 'Pending' AND is_deleted = 0");
   $totalPending = $stmt->fetchColumn();
   //Total ongoing reports
-  $stmt = $pdo->query("SELECT COUNT(*) FROM blotter_reports WHERE status = 'Under Investigation' AND is_deleted = 0");
-  $totalUnderInvestigation = $stmt->fetchColumn();
+  $stmt = $pdo->query("SELECT COUNT(*) FROM blotter_reports WHERE status = 'For Schedule' AND is_deleted = 0");
+  $totalForSchedule = $stmt->fetchColumn();
   //Total resolved reports
   $stmt = $pdo->query("SELECT COUNT(*) FROM blotter_reports WHERE status = 'Resolved' AND is_deleted = 0");
   $totalResolved = $stmt->fetchColumn();
-  //Total for mediation reports
-  $stmt = $pdo->query("SELECT COUNT(*) FROM blotter_reports WHERE status = 'For Mediation' AND is_deleted = 0");
-  $totalForMediation = $stmt->fetchColumn();
+  //Total for ongoing reports
+  $stmt = $pdo->query("SELECT COUNT(*) FROM blotter_reports WHERE status = 'Ongoing' AND is_deleted = 0");
+  $totalForOngoing = $stmt->fetchColumn();
 
 ?>
 
@@ -30,13 +31,13 @@
                         <div class="row">
                             <div class="col">
                                 <p class="card-text">
-                                    <strong>Investigating</strong>
+                                    <strong>For Schedule</strong>
                                 </p>
-                                <h3 class="card-title"><?= $totalUnderInvestigation ?></h3>
+                                <h3 class="card-title"><?= $totalForSchedule ?></h3>
                             </div>
                             <div class="col-auto">
                                 <div class="icon p-3 icon-shape bg-warning-subtle text-warning-emphasis rounded-circle shadow-sm">
-                                    <i class="material-symbols-outlined md-24 text-dark">mystery</i>
+                                    <i class="material-symbols-outlined md-24 text-dark">calendar_month</i>
                                 </div>
                             </div>
                         </div>
@@ -49,28 +50,9 @@
                         <div class="row">
                             <div class="col">
                                 <p class="card-text">
-                                    <strong>Resolved</strong>
+                                    <strong>Ongoing</strong>
                                 </p>
-                                <h3 class="card-title"><?= $totalResolved ?></h3>
-                            </div>
-                            <div class="col-auto">
-                                <div class="icon p-3 icon-shape bg-success-subtle text-success-emphasis rounded-circle shadow-sm">
-                                    <i class="material-symbols-outlined md-24 text-dark">data_check</i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-3">
-                <div class="card h-100 rounded-0 border-0">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <p class="card-text">
-                                    <strong>Mediating</strong>
-                                </p>
-                                <h3 class="card-title"><?= $totalForMediation ?></h3>
+                                <h3 class="card-title"><?= $totalForOngoing ?></h3>
                             </div>
                             <div class="col-auto">
                                 <div class="icon p-3 icon-shape bg-danger-subtle text-danger-emphasis rounded-circle shadow-sm">
@@ -100,6 +82,26 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-3 col-3">
+                <div class="card h-100 rounded-0 border-0">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <p class="card-text">
+                                    <strong>Resolved</strong>
+                                </p>
+                                <h3 class="card-title"><?= $totalResolved ?></h3>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon p-3 icon-shape bg-success-subtle text-success-emphasis rounded-circle shadow-sm">
+                                    <i class="material-symbols-outlined md-24 text-dark">data_check</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
   </div>
@@ -154,6 +156,7 @@
                               <th>Suspect</th>
                               <th>Incident</th>
                               <th>Status</th>
+                              <th>Letter</th>
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -165,10 +168,10 @@
 
                               // Choices for status dropdown
                               $statusChoices = [
-                                  'Under Investigation' => 'Under Investigation',
-                                  'Resolved' => 'Resolved',
+                                  'For Schedule' => 'For Schedule',
+                                  'Ongoing' => 'Ongoing',
                                   'Pending' => 'Pending',
-                                  'For Mediation' => 'For Mediation'
+                                  'Resolved' => 'Resolved'                                  
                               ];
 
                               $stmt = $pdo->query("SELECT * FROM blotter_reports WHERE is_deleted = 0 ORDER BY created_at DESC");
@@ -201,6 +204,38 @@
                                     <?php endforeach; ?>
                                   </ul>
                                 </div>
+                              </td>
+                              <td class="text-center">
+                                <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="true">
+                                <i class="add-resident-subheading-icon material-symbols-outlined md-18 text-light">export_notes</i>
+                                </button>
+                                <ul class="dropdown-menu blotter-actions" data-blotter-code="<?= $row['blotter_code'] ?>" data-blotter-id="<?= $row['id'] ?>" data-complainant-full-name="<?= $row['complainant_first_name'] . ' ' . $row['complainant_last_name'] ?>" data-suspect-full-name="<?= $row['suspect_first_name'] . ' ' . $row['suspect_last_name'] ?>" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 33.5px);" data-popper-placement="bottom-end">
+                                  <li>
+                                      <a class="dropdown-item small print-letter" data-bs-toggle="modal" data-bs-target="#summon-letter" href="#">
+                                          Create a summon letter
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a class="dropdown-item small print-letter" data-bs-toggle="modal" data-bs-target="#subpoena" href="#">
+                                          Issue Subpoena
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a class="dropdown-item small print-letter" data-bs-toggle="modal" data-bs-target="#file-action-letter" href="#">
+                                          Generate Certificate to File Action
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a class="dropdown-item small print-letter" data-bs-toggle="modal" data-bs-target="#amicable-settlement" href="#">
+                                          Amicable Settlement
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a class="dropdown-item small print-letter" data-bs-toggle="modal" data-bs-target="#failure-to-appear" href="#">
+                                          Issue Failure to Appear
+                                      </a>
+                                  </li>
+                                </ul>
                               </td>
                               <td class="text-center">
                                 <div class="d-flex gap-2">
@@ -245,8 +280,551 @@
     </div>
   </section>
 
+<div class="modal fade modal-letter" id="summon-letter" tabindex="-1" aria-labelledby="letterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Summon Letter</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body letter" id="summon-letter">
+              <div class="text-center pb-2 mb-3" style="border-bottom: 3px double #777;">
+                      Republic of the Philippines <br>
+                      Province of Bulacan <br>
+                      Municipality of Plaridel <br>
+                      Barangay Lalangan <br>
+                      <br>
+                      <b>OFFICE OF THE LUPONG TAGAPAMAYAPA</b>
+              </div>
+              <div class="row">
+                  <div class="col-6 px-5">
+                      <div class="">
+                          <div class="underlined-field">
+                            <p class="text-center complainant-name-placeholder"></p>
+                          </div>
+                          <!-- <div class="underlined-field">Someone else</div> -->
+                          <div class="text-center fw-semibold">Complainant/s</div>
+                      </div>
+                      <div class="text-center fw-semibold my-3">-against-</div>
+                      <div class="">
+                          <div class="underlined-field text-center">
+                            <p class="suspect-name-placeholder"></p>
+                          </div>
+                          <!-- <div class="underlined-field">Someone else</div> -->
+                          <div class="text-center fw-semibold">Respondent/s</div>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="d-flex">
+                         <strong>Barangay Case No.: <div class="underlined-field summon-id blotter-code-placeholder"></div></strong>
+                      </div>
+                      <div class="d-flex">
+                          For:  <div class="underlined-field">
+                            <p class="text-center complainant-name-placeholder"></p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="text-center fw-bolder my-3 fs-5">S U M M O N S</div>
+
+              <div class="w-50 d-flex mb-3">
+                  TO: <div class="flex-grow-1 ms-2 me-5 px-1">
+                      <div class="underlined-field">
+                        <p class="text-center suspect-name-placeholder"></p>
+                      </div>
+                      <div class="text-center fw-semibold">Respondent/s</div>
+                  </div>
+              </div>
+
+              <div class="paragraph">
+                  <p class="indent text-justify">
+                      You are hereby summoned to appear before me in person, together with your witnesses, on the
+                      <span id="" class="d-inline text-nowrap letter-date-container">
+                          <span class="letter-date-placeholder pointer text-danger fw-semibold" style="border-bottom: 1px dashed var(--bs-danger);">< pick a date > </span>
+                          <span class="letter-date-value pointer" style="border-bottom: 1px dashed var(--bs-dark); display: none;">4th date of May</span>
+
+                      </span> <span class="overflow-hidden d-inline-block letter-date" style="width: 0px !important; height: 0px !important;"><input id="letter-date-input" type="date"></span>, then and there to answer to a complaint made before me, copy of which is attached hereto, for
+                      mediation/conciliation of your dispute with complainant/s.
+                  </p>
+                  <p class="indent text-justify">
+                      You are hereby warned that if you refuse or willfully fail to appear in obedience to this summons,
+                      you may be barred from filing any counterclaim arising from said complaint.
+                  </p>
+                  <p> FAIL NOT or else face punishment as for contempt of court. </p>
+                  <p>
+                    This <u><?= getOrdinal(date("j")) ?></u> day of <?= date("F") ?>, <?= date("Y") ?>.
+                  </p>
+              </div>
+              
+              <div class="">
+              <div class="row">
+                  <div class="offset-6 col-6">
+                      <div class="text-center underlined-field">
+                          Mr. Danilo Tayao
+                      </div>
+                      <div class="fw-semibold text-center">Barangay Captain</div>
+                      <div class="underlined-field mt-3 text-center">
+                          Lupon ng Tagapamayapa [Name]
+                      </div>
+                      <div class="fw-semibold text-center">Lupon ng Tagapamayapa</div>
+                  </div>
+              </div>
+              </div>
+
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary flex-grow-1 export-letter">Export</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
 
 
+<div class="modal fade modal-letter" id="subpoena" tabindex="-1" aria-labelledby="letterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Subpoena Letter</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body letter" id="subpoena">
+                <div class="text-center pb-2 mb-3" style="border-bottom: 3px double #777;">
+                        Republic of the Philippines <br>
+                        Province of Bulacan <br>
+                        Municipality of Plaridel <br>
+                        Barangay Lalangan <br>
+                        <br>
+                        <b>OFFICE OF THE LUPONG TAGAPAMAYAPA</b>
+                </div>
+                <div class="row">
+                    <div class="col-6 px-5">
+                        <div class="">
+                            <div class="underlined-field">
+                              <p class="text-center complainant-name-placeholder"></p>
+                            </div>
+                            <!-- <div class="underlined-field">Someone else</div> -->
+                            <div class="text-center fw-semibold">Complainant/s</div>
+                        </div>
+                        <div class="text-center fw-semibold my-3">-against-</div>
+                        <div class="">
+                            <div class="underlined-field text-center">
+                              <p class="suspect-name-placeholder"></p>
+                            </div>
+                            <!-- <div class="underlined-field">Someone else</div> -->
+                            <div class="text-center fw-semibold">Respondent/s</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex">
+                            <strong>Barangay Case No.: <div class="underlined-field summon-id blotter-code-placeholder"></div></strong>
+                        </div>
+                        <div class="d-flex">
+                            For: <div class="underlined-field">
+                              <p class="text-center complainant-name-placeholder"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center fw-bolder my-3 fs-5">S U B P O E N A</div>
+
+                <div class="w-50 d-flex mb-3">
+                    TO: <div class="flex-grow-1 ms-2 me-5 px-1">
+                        <div class="underlined-field">
+                          <p class="text-center suspect-name-placeholder"></p>
+                        </div>
+                        <div class="text-center fw-semibold ">Respondent/s</div>
+                    </div>
+                </div>
+
+                <div class="paragraph">
+                    <p class="indent text-justify">
+                        You are hereby commanded to appear before me on the 
+                        <span id="" class="d-inline text-nowrap letter-date-container">
+                            <span class="letter-date-placeholder pointer text-danger fw-semibold" style="border-bottom: 1px dashed var(--bs-danger);">< pick a date ></span>
+                            <span class="letter-date-value pointer" style="border-bottom: 1px dashed var(--bs-dark); display: none;">4th date of May</span>
+                            
+                        </span> <span class="overflow-hidden d-inline-block letter-date" style="width: 0px !important; height: 0px !important;"><input type="date"></span>, then and there to testify in the hearing of the above-captioned case.
+                        
+                    </p>
+                    <p> This <u><?=getOrdinal(date("d"))?></u> day of <?= date("M")?>, <?= date("Y")?>. </p>
+                </div>
+                
+                <div class="">
+                <div class="row">
+                    <div class="offset-6 col-6">
+                        <div class="underlined-field text-center">
+                            Mr. Danilo Tayao
+                        </div>
+                        <div class="fw-semibold text-center">Barangay Captain</div>
+                        <div class="underlined-field mt-3 text-center">
+                            Lupon ng Tagapamayapa [Name]
+                        </div>
+                        <div class="fw-semibold text-center">Lupon ng Tagapamayapa</div>
+                    </div>
+                </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary flex-grow-1 export-letter">Export</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-letter" id="file-action-letter" tabindex="-1" aria-labelledby="letterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Certification to File Action</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body letter" id="summon-letter">
+              <div class="text-center pb-2 mb-3" style="border-bottom: 3px double #777;">
+                      Republic of the Philippines <br>
+                      Province of Bulacan <br>
+                      Municipality of Plaridel <br>
+                      Barangay Lalangan <br>
+                      <br>
+                      <b>OFFICE OF THE LUPONG TAGAPAMAYAPA</b>
+              </div>
+              <div class="row">
+                  <div class="col-6 px-5">
+                      <div class="">
+                          <div class="underlined-field">
+                            <p class="text-center complainant-name-placeholder"></p>
+                          </div>
+                          <!-- <div class="underlined-field">Someone else</div> -->
+                          <div class="text-center fw-semibold">Complainant/s</div>
+                      </div>
+                      <div class="text-center fw-semibold my-3">-against-</div>
+                      <div class="">
+                            <div class="underlined-field text-center">
+                              <p class="suspect-name-placeholder"></p>
+                            </div>
+                          <!-- <div class="underlined-field">Someone else</div> -->
+                          <div class="text-center fw-semibold">Respondent/s</div>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="d-flex">
+                        <strong>Barangay Case No.: <div class="underlined-field summon-id blotter-code-placeholder"></div></strong>
+                      </div>
+                      <div class="d-flex">
+                          For: <div class="underlined-field">
+                            <p class="text-center complainant-name-placeholder"></p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="text-center fw-bolder my-3 fs-5">C E R T I F I C A T I O N     T O     F I L E    A C T I O N</div>
+
+              <div class="w-50 d-flex mb-3">
+                  TO: <div class="flex-grow-1 ms-2 me-5 px-1">
+                      <div class="underlined-field">
+                        <p class="text-center suspect-name-placeholder"></p> 
+                      </div>
+                      <div class="text-center fw-semibold ">Respondent/s</div>
+                  </div>
+              </div>
+
+              <div class="paragraph">
+                  <p class="indent text-justify">THIS IS TO CERTIFY THAT:</p>
+                  <ol class="indent text-justify">
+                      <li>There has been a personal confrontation between the parties before the Punong Barangay
+                      but mediation failed</li>
+                      <li>The Pangkat ng Tagapagkasundo was constituted but the personal confrontation before the
+                      Pangkat likewise did not result into a settlement; and</li>
+                      <li>Therefore, the corresponding complaint for the dispute may now be filed in
+                      court/government office.</li>
+                  </ol>
+                  <p class="indent text-justify">
+                      This day of: 
+                      <span id="" class="d-inline text-nowrap letter-date-container">
+                          <span class="letter-date-placeholder pointer text-danger fw-semibold" style="border-bottom: 1px dashed var(--bs-danger);">< pick a date ></span>
+                          <span class="letter-date-value pointer" style="border-bottom: 1px dashed var(--bs-dark); display: none;">4th date of May</span>
+                          
+                      </span> <span class="overflow-hidden d-inline-block letter-date" style="width: 0px !important; height: 0px !important;"><input type="date"></span>.
+                      
+                  </p>
+                  <!-- <p> This <u><?=getOrdinal(date("d"))?></u> day of <?= date("M")?>, <?= date("Y")?>. </p> -->
+              </div>
+              
+              <div class="">
+              <div class="row">
+                  <div class="offset-6 col-6">
+                      <div class="underlined-field text-center">
+                        Mr. Danilo Tayao
+                      </div>
+                      <div class="fw-semibold text-center">Barangay Captain</div>
+                      <div class="underlined-field mt-3 text-center">
+                        Lupon ng Tagapamayapa [Name]
+                      </div>
+                      <div class="fw-semibold text-center">Lupon ng Tagapamayapa</div>
+                  </div>
+              </div>
+              </div>
+
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary flex-grow-1 export-letter">Export</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade modal-letter" id="amicable-settlement" tabindex="-1" aria-labelledby="letterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Amicable Settlement Letter</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body letter" id="summon-letter">
+              <div class="text-center pb-2 mb-3" style="border-bottom: 3px double #777;">
+                      Republic of the Philippines <br>
+                      Province of Bulacan <br>
+                      Municipality of Plaridel <br>
+                      Barangay Lalangan <br>
+                      <br>
+                      <b>OFFICE OF THE LUPONG TAGAPAMAYAPA</b>
+              </div>
+              <div class="row">
+                  <div class="col-6 px-5">
+                      <div class="">
+                          <div class="underlined-field">
+                            <p class="text-center complainant-name-placeholder"></p>
+                          </div>
+                          <!-- <div class="underlined-field">Someone else</div> -->
+                          <div class="text-center fw-semibold">Complainant/s</div>
+                      </div>
+                      <div class="text-center fw-semibold my-3">-against-</div>
+                      <div class="">
+                            <div class="underlined-field text-center">
+                              <p class="suspect-name-placeholder"></p>
+                            </div>
+                          <!-- <div class="underlined-field">Someone else</div> -->
+                          <div class="text-center fw-semibold">Respondent/s</div>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="d-flex">
+                        <strong>Barangay Case No.: <div class="underlined-field summon-id blotter-code-placeholder"></div></strong>
+                      </div>
+                      <div class="d-flex">
+                          For: <div class="underlined-field">
+                            <p class="text-center complainant-name-placeholder"></p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="text-center fw-bolder my-3 fs-5">AMICABLE SETTLEMENT</div>
+
+              <div class="w-50 d-flex mb-3">
+                  TO: <div class="flex-grow-1 ms-2 me-5 px-1">
+                      <div class="underlined-field">
+                        <p class="text-center suspect-name-placeholder"></p>
+                      </div>
+                      <div class="text-center fw-semibold ">Respondent/s</div>
+                  </div>
+              </div>
+
+              <div class="paragraph">
+                  <p class="indent text-justify">We, complainant/s and respondent/s in the above-captioned case, do hereby agree to settle our
+                  dispute as follows:</p>
+                  <table class="table table-bordered">
+                      <tbody>
+                          <tr>
+                              <td class="p-0"><input type="text" class="form-control form-control-tranparent border-0 fw-bold letter-text" placeholder="< add details >"></td>
+                          </tr>
+                          <tr>
+                              <td class="p-0"><input type="text" class="form-control form-control-tranparent border-0 fw-bold letter-text" placeholder="< add details >"></td>
+                          </tr>
+                          <tr>
+                              <td class="p-0"><input type="text" class="form-control form-control-tranparent border-0 fw-bold letter-text" placeholder="< add details >"></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  <p class="indent text-justify">and bind ourselves to comply honestly and faithfully with the above terms of settlement.</p>
+                  <p class="indent text-justify">
+                      Entered this day of: 
+                      <span id="" class="d-inline text-nowrap letter-date-container">
+                          <span class="letter-date-placeholder pointer text-danger fw-semibold" style="border-bottom: 1px dashed var(--bs-danger);">< pick a date ></span>
+                          <span class="letter-date-value pointer" style="border-bottom: 1px dashed var(--bs-dark); display: none;">4th date of May</span>
+                          
+                      </span> <span class="overflow-hidden d-inline-block letter-date" style="width: 0px !important; height: 0px !important;"><input type="date"></span>.
+                      
+                  </p>
+                  <table class="table table-bordered">
+                      <thead>
+                          <tr>
+                              <th scope="col">Complaint/s</th>
+                              <th scope="col">Respondent</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td class="p-0"><input type="text" class="form-control form-control-tranparent border-0 fw-bold letter-text" placeholder="< add details >"></td>
+                              <td class="p-0"><input type="text" class="form-control form-control-tranparent border-0 fw-bold letter-text" placeholder="< add details >"></td>
+                          </tr>
+                          <tr>
+                              <td class="p-0"><input type="text" class="form-control form-control-tranparent border-0 fw-bold letter-text" placeholder="< add details >"></td>
+                              <td class="p-0"><input type="text" class="form-control form-control-tranparent border-0 fw-bold letter-text" placeholder="< add details >"></td>
+                          </tr>
+                          <tr>
+                              <td class="p-0"><input type="text" class="form-control form-control-tranparent border-0 fw-bold letter-text" placeholder="< add details >"></td>
+                              <td class="p-0"><input type="text" class="form-control form-control-tranparent border-0 fw-bold letter-text" placeholder="< add details >"></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  <p class="indent text-justify">ATTESTATION</p>
+                  <p class="indent text-justify">I hereby certify that the foregoing amicable settlement was entered into by the parties freely and
+                  voluntarily, after I had explained to them the nature and consequence of such settlement.</p>
+                  <!-- <p> This <u><?=getOrdinal(date("d"))?></u> day of <?= date("M")?>, <?= date("Y")?>. </p> -->
+              </div>
+              
+              <div class="">
+                <div class="row">
+                    <div class="offset-6 col-6">
+                        <div class="underlined-field text-center">
+                            Mr. Danilo Tayao
+                        </div>
+                        <div class="fw-semibold text-center">Barangay Captain</div>
+                        <div class="underlined-field mt-3 text-center">
+                            Lupon ng Tagapamayapa [name]
+                        </div>
+                        <div class="fw-semibold text-center">Lupon ng Tagapamayapa</div>
+                    </div>
+                </div>
+              </div>
+
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary flex-grow-1 export-letter">Export</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade modal-letter" id="failure-to-appear" tabindex="-1" aria-labelledby="letterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Failure to Appear Letter</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body letter" id="summon-letter">
+              <div class="text-center pb-2 mb-3" style="border-bottom: 3px double #777;">
+                      Republic of the Philippines <br>
+                      Province of Bulacan <br>
+                      Municipality of Plaridel <br>
+                      Barangay Lalangan <br>
+                      <br>
+                      <b>OFFICE OF THE LUPONG TAGAPAMAYAPA</b>
+              </div>
+              <div class="row">
+                  <div class="col-6 px-5">
+                      <div class="">
+                          <div class="underlined-field">
+                            <p class="text-center complainant-name-placeholder"></p>
+                          </div>
+                          <!-- <div class="underlined-field">Someone else</div> -->
+                          <div class="text-center fw-semibold">Complainant/s</div>
+                      </div>
+                      <div class="text-center fw-semibold my-3">-against-</div>
+                      <div class="">
+                        <div class="underlined-field text-center">
+                          <p class="suspect-name-placeholder"></p>
+                        </div>
+                          <!-- <div class="underlined-field">Someone else</div> -->
+                        <div class="text-center fw-semibold">Respondent/s</div>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="d-flex">
+                        <strong>Barangay Case No.: <div class="underlined-field summon-id blotter-code-placeholder"></div></strong>
+                      </div>
+                      <div class="d-flex">
+                          For: <div class="underlined-field">
+                            <p class="text-center complainant-name-placeholder"></p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="text-center fw-bolder my-3 fs-5">NOTICE OF HEARING<br>
+                  (RE: FAILURE TO APPEAR)
+              </div>
+
+              <div class="w-50 d-flex mb-3">
+                  TO: <div class="flex-grow-1 ms-2 me-5 px-1">
+                      <div class="underlined-field">
+                        <p class="suspect-name-placeholder"></p>
+                      </div>
+                      <div class="text-center fw-semibold ">Complainant/s</div>
+                  </div>
+              </div>
+
+              <div class="paragraph">
+                  <p class="text-justify"> <span class="d-inline-block" style="width: 50px;"></span> You are hereby required to appear before me/the Pangkat on the: 
+                  <span class="d-inline-block text-center fw-semibold" style="min-width: 110px; height: 1rem;" contenteditable data-placeholder="< add details >"></span> 
+                  at <span class="d-inline-block text-center fw-semibold" style="min-width: 110px; height: 1rem;" contenteditable data-placeholder="< add details >"></span> 
+                  o’clock in the morning/ afternoon to explain why you failed to appear for
+                  mediation/conciliation scheduled on 
+                  <span class="d-inline-block text-center fw-semibold" style="min-width: 110px; height: 1rem;" contenteditable data-placeholder="< add details >"></span> 
+                  at <span class="d-inline-block text-center fw-semibold" style="min-width: 110px; height: 1rem;" contenteditable data-placeholder="< add details >"></span>
+                    and why your complaint should not be dismissed, a certificate to bar the filing of your action on court/government office should not be issued, and contempt proceedings should not be initiated in court for willful failure or refusal to appear before the Punong Barangay/ Pangkat ng Tagapagkasundo.</p>
+                  <p class="indent text-justify">
+                      Entered this day of: 
+                      <span id="" class="d-inline text-nowrap letter-date-container">
+                          <span class="letter-date-placeholder pointer text-danger fw-semibold" style="border-bottom: 1px dashed var(--bs-danger);">< pick a date ></span>
+                          <span class="letter-date-value pointer" style="border-bottom: 1px dashed var(--bs-dark); display: none;">4th date of May</span>
+                          
+                      </span> <span class="overflow-hidden d-inline-block letter-date" style="width: 0px !important; height: 0px !important;"><input type="date"></span>.
+                      
+                  </p>
+              </div>
+              
+              <div class="">
+              <div class="row">
+                  <div class="offset-6 col-6">
+                      <div class="underlined-field text-center">
+                        Mr. Danilo Tayao
+                      </div>
+                      <div class="fw-semibold text-center">Barangay Captain</div>
+                      <div class="underlined-field mt-3 text-center">
+                          Lupon ng Tagapamayapa [Name]
+                      </div>
+                      <div class="fw-semibold text-center">Lupon ng Tagapamayapa</div>
+                  </div>
+                  <div class="col-12">
+                      <p class="indent text-justify"> Notified this 
+                          <span id="" class="d-inline text-nowrap letter-date-container">
+                                  <span class="letter-date-placeholder pointer text-danger fw-semibold" style="border-bottom: 1px dashed var(--bs-danger);">< pick a date ></span>
+                                  <span class="letter-date-value pointer" style="border-bottom: 1px dashed var(--bs-dark); display: none;">4th date of May</span>
+                              </span><span class="overflow-hidden d-inline-block letter-date" style="width: 0px !important; height: 0px !important;"><input type="date"></span>.
+                          </span>
+                      </p>
+                  </div>
+              </div>
+              </div>
+
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary flex-grow-1 export-letter">Export</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
 
   <!-- Success Modal -->
 <div class="modal fade" id="submissionModal" tabindex="-1" aria-labelledby="submissionModalLabel" aria-hidden="true">
@@ -263,274 +841,8 @@
   </div>
 </div>
 
-<!-- Edit Resident Modal -->
-<div class="modal fade" id="editResidentModal" tabindex="-1" aria-labelledby="editResidentModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <form id="editResidentForm" enctype="multipart/form-data" method="POST" class="needs-validation" novalidate action="<?= ACTIONS_URL ?>update-resident.php">
-      <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title" id="editResidentModalLabel">Edit Resident</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
 
-        <div class="modal-body">
-          <!-- Form fields (same as your add-resident form) -->
-          <input type="hidden" name="resident_id" id="edit_id">
-          <div class="row">
-            <div class="card-mb-4 d-flex align-items-center justify-content-center">
-              <p><img style="max-width: 350px" id="resident-picture" class="img-thumbnail" alt="Profile"></p>
-            </div>
-          </div>
-          <!-- Basic Information -->
-          <div class="card mb-4">
-            <input type="text" id="edit_id" name="id" class="form-control d-none" placeholder="id" required readonly>
-            <div class="card-header fw-bold">Basic Information</div>
-            <div class="card-body row g-3">
-              <div class="col-md-4"><input type="text" id="edit_first_name" name="edit_first_name" class="form-control" placeholder="First name" required>
-                <div class="invalid-feedback">First Name is required.</div>
-              </div>
-              <div class="col-md-4"><input type="text" id="edit_middle_name" name="edit_middle_name" class="form-control" placeholder="Middle name"></div>
-              <div class="col-md-4"><input type="text" id="edit_last_name" name="edit_last_name" class="form-control" placeholder="Last name" required>
-                <div class="invalid-feedback">Last Name is required.</div>
-              </div>
-
-              <div class="col-md-4">
-                  <label for="birth_province" class="form-label">Place of Birth – Province</label>
-                  <select id="edit_birth_province" name="edit_birth_province" class="form-select" required>
-                      <option>Select Province</option>
-                      <?php
-                      require '../config/database.php';
-                      $stmt = $pdo->query("SELECT province_id, name FROM provinces ORDER BY name");
-                      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                          echo "<option value=".strval($row['province_id']).">{$row['name']}</option>";
-                      }
-                      ?>
-                </select>
-                <div class="invalid-feedback">Place of Birth (Province) is required.</div>
-              </div>
-              <div class="col-md-4">
-                  <label for="birth_city" class="form-label">Place of Birth – City / Municipality</label>
-                  <select id="edit_birth_city" id="edit_birth_city" name="edit_birth_city" class="form-select" required>
-                      <option>Select City</option>
-                  </select>
-                  <div class="invalid-feedback">Place of Birth (City or Municipality) is required.</div>
-              </div>
-              <div class="col-md-4">
-                  <label for="birth_barangay" class="form-label">Place of Birth – Barangay</label>
-                  <select id="edit_birth_barangay" id="edit_birth_barangay" name="edit_birth_barangay" class="form-select" required>
-                      <option>Select City</option>
-                  </select>
-              </div>
-              <div class="col-md-2">
-                <label class="form-label">Date of Birth</label>
-                <input name="edit_birthdate"  id="edit_birthdate" type="date" class="form-control" required>
-                <div class="invalid-feedback">Date of Birth is required.</div>
-              </div>
-              <div class="col-md-2">
-                <label class="form-label">Age</label>
-                <input type="text" id="edit_age" name="age" class="form-control" placeholder="" readonly>
-              </div>
-              <div class="col-md-2">
-                <label class="form-label">Gender</label>
-                <select name="edit_gender" id="edit_gender" class="form-select" required><option>Male</option><option>Female</option></select>
-                <div class="invalid-feedback">Gender is required.</div>
-              </div>
-              <div class="col-md-2">
-                <label class="form-label">Civil Status</label>
-                <select class="form-select" id="edit_civil_status" name="edit_civil_status" required><option>Single</option><option>Married</option><option>Widowed</option></select>
-                <div class="invalid-feedback">Civil Status is required</div>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">Phone Number</label>
-                <input name="edit_phone_number" id="edit_phone_number" type="text" class="form-control" placeholder="0900-000-0000" required>
-                <div class="invalid-feedback">Phone Number is required.</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Present Address -->
-          <div class="card mb-4">
-            <div class="card-header fw-bold">Present Address</div>
-            <div class="card-body row g-3">
-              <div class="col-md-4">
-                <label class="form-label">Province</label>
-                <select id="edit_present_province" name="edit_present_province" class="form-select" required>
-                  <option>Select Province</option>
-                  <?php
-                  require '../config/database.php';
-                  $stmt = $pdo->query("SELECT province_id, name FROM provinces ORDER BY name");
-                  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                      echo "<option value=".strval($row['province_id']).">{$row['name']}</option>";
-                  }
-                  ?>
-                </select>
-                <div class="invalid-feedback">Present Address (Province) is required.</div>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">City / Municipality</label>
-                <select id="edit_present_city" name="edit_present_city" class="form-select" required>
-
-                </select>
-                <div class="invalid-feedback">Present Address (City / Municipality) is required.</div>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">Barangay</label>
-                  <select id="edit_present_barangay" name="edit_present_barangay" class="form-select" required>
-
-                  </select>
-                  <div class="invalid-feedback">Present Address (Barangay) is required.</div>
-              </div>
-              <div class="col-md-3">
-                <input type="text" id="edit_present_zone" name="edit_present_zone" class="form-control" placeholder="Zone (Purok)">
-              </div>
-              <div class="col-md-6">
-                <input type="text" id="edit_present_street" name="edit_present_street" class="form-control" placeholder="Street">
-              </div>
-              <div class="col-md-3">
-                <input type="text" id="edit_present_landmark" name="edit_present_landmark" class="form-control" placeholder="Landmark">
-              </div>
-            </div>
-          </div>
-
-          <!-- Permanent Address -->
-          <div id="permanentAddressBlock">
-              <div class="card mb-4">
-              <div class="card-header fw-bold">Permanent Address</div>
-              <div class="card-body row g-3">
-                  <div class="col-md-4">
-                    <label class="form-label">Province</label>
-                    <select id="edit_permanent_province" name="edit_permanent_province" class="form-select" required>
-                        <option>Select Province</option>
-                        <?php
-                        require '../config/database.php';
-                        $stmt = $pdo->query("SELECT province_id, name FROM provinces ORDER BY name");
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo "<option value=".strval($row['province_id']).">{$row['name']}</option>";
-                        }
-                        ?>
-                    </select>
-                    <div class="invalid-feedback">Permanent Address (Province) is required.</div>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label">City / Municipality</label>
-                    <select id="edit_permanent_city" name="edit_permanent_city" class="form-select" required>
-
-                    </select>
-                    <div class="invalid-feedback">Permanent Address (City / Municipality) is required.</div>
-                  </div>
-                  <div class="col-md-4">
-                  <label class="form-label">Barangay</label>
-                      <select id="edit_permanent_barangay" name="edit_permanent_barangay" class="form-select" required>
-
-                      </select>
-                      <div class="invalid-feedback">Permanent Address (Barangay) is required.</div>
-                  </div>
-                  <div class="col-md-3">
-                  <input type="text" id="edit_permanent_zone" name="edit_permanent_zone" class="form-control" placeholder="Zone (Purok)">
-                  </div>
-                  <div class="col-md-6">
-                  <input type="text" id="edit_permanent_street" name="edit_permanent_street" class="form-control" placeholder="Street">
-                  </div>
-                  <div class="col-md-3">
-                  <input type="text" id="edit_permanent_landmark" name="edit_permanent_landmark" class="form-control" placeholder="Landmark">
-                  </div>
-              </div>
-              </div>
-          </div>
-
-
-          <!-- Other Information -->
-          <div class="card mb-4">
-            <div class="card-header fw-bold">Other Information</div>
-            <div class="card-body row g-3">
-              <div class="col-md-4">
-                <input type="text" name="edit_occupation" id="edit_occupation" class="form-control" placeholder="Occupation">
-                  <div class="form-check form-switch">
-                  <input name="edit_unemployed" class="form-check-input" type="checkbox" id="edit_unemployed">
-                  <label class="form-check-label" for="unemployedSwitch">Unemployed</label>
-                </div>
-              </div>
-              <div class="col-md-4"><input type="email" id="edit_email" name="edit_email" class="form-control" placeholder="email@example.com" required>
-                  <div class="invalid-feedback">Email is required.</div>
-              </div>
-              <div class="col-md-4"><input type="text" id="edit_alias_nickname" name="edit_alias_nickname" class="form-control" placeholder="Alias/Nickname"></div>
-
-              <div class="col-md-3">
-                <div class="form-check form-switch">
-                  <input name="edit_status" class="form-check-input" type="checkbox" id="edit_aliveSwitch">
-                  <label class="form-check-label" for="aliveSwitch">Alive</label>
-                </div>
-              </div>
-              <div class="col-md-5">
-                <select id="edit_valid_id_type" name="edit_valid_id_type" class="form-select">
-                  <option>Select a Valid ID</option>
-                  <option value="Philippine Passport">Philippine Passport</option>
-                  <option value="National ID (PhilSys ID/ePhilID)">National ID (PhilSys ID/ePhilID)</option>
-                  <option value="SSS ID/UMID Card">SSS ID/UMID Card</option>
-                  <option value="GSIS ID/UMID Card">GSIS ID/UMID Card</option>
-                  <option value="Driver's License">Driver's License</option>
-                  <option value="PRC ID">PRC ID</option>
-                  <option value="OWWA/iDOLE Card">OWWA/iDOLE Card</option>
-                  <option value="Voter's ID/Voter's Certification">Voter's ID/Voter's Certification</option>
-                  <option value="Firearms License (PNP)">Firearms License (PNP)</option>
-                  <option value="Senior Citizen ID">Senior Citizen ID</option>
-                  <option value="PWD ID">PWD ID</option>
-                  <option value="NBI Clearance">NBI Clearance</option>
-                  <option value="PhilHealth ID">PhilHealth ID</option>
-                  <option value="Postal ID">Postal ID</option>
-                  <option value="School ID">School ID</option>
-                  <option value="Company/Office ID">Company/Office ID</option>
-                  <option value="Barangay ID/Certification">Barangay ID/Certification</option>
-                  <option value="Police Clearance/Police Clearance Certificate">Police Clearance/Police Clearance Certificate</option>
-                  <option value="Seaman's Book/SIRB">Seaman's Book/SIRB</option>
-                  <option value="HDMF Transaction ID Card">HDMF Transaction ID Card</option>
-                  <option value="Solo Parent ID Card">Solo Parent ID Card</option>
-                  <option value="PhilSys ID">PhilSys ID</option>
-                  <option value="ePhilID">ePhilID</option>
-                  <option value="Professional Regulation Commission (PRC) card">Professional Regulation Commission (PRC) card</option>
-                  <option value="Seaman's Book (Seafarer's Identification and Record Book)">Seaman's Book (Seafarer's Identification and Record Book)</option>
-                  <option value="PhilSys ID/ePhilID">PhilSys ID/ePhilID</option>
-                  <option value="Philippine Health Insurance Corporation (PHIC) ID card/Member Data Record">Philippine Health Insurance Corporation (PHIC) ID card/Member Data Record</option>
-                  <option value="Seafarer's Registration Certificate issued by Philippine Overseas Employment Administration (POEA)">Seafarer's Registration Certificate issued by Philippine Overseas Employment Administration (POEA)</option>
-                  <option value="Transcript of Records">Transcript of Records</option>
-                  <option value="Student Permit issued by Land Transportation Office (LTO)">Student Permit issued by Land Transportation Office (LTO)</option>
-                </select>
-              </div>
-              <div class="col-md-4">
-                <input type="text" class="form-control" id="edit_valid_id_number" name="edit_valid_id_number" placeholder="Valid ID No.">
-              </div>
-            </div>
-          </div>
-
-          <!-- Add Photo -->
-          <div class="card mb-4">
-            <div class="card-header fw-bold">Change Photo</div>
-            <div class="card-body row g-3 align-items-center">
-              <div class="mb-3">
-                  <video id="cameraPreview" autoplay playsinline width="300" height="225" class="border rounded d-none"></video>
-                  <canvas id="snapshotCanvas" width="300" height="225" class="d-none"></canvas>
-                  <div class="mt-2">
-                      <button type="button" class="btn btn-primary" id="captureBtn">Capture Photo</button>
-                  </div>
-                  <input type="hidden" name="captured_photo" id="captured_photo">
-              </div>
-
-              <div class="col-md-6">
-                  <input type="file" name="photo" accept="image/*" class="form-control">
-                  <small class="text-muted">It is recommended when uploading a photo to select one with a 1x1 dimension</small>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Save Changes</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
+<!-- Modal for Blotter Letters -->
 
 
 <?php if (isset($_GET['success'])): ?>

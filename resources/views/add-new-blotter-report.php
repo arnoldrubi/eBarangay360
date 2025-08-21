@@ -307,6 +307,7 @@
                   <option value="Maintenance Issues">Maintenance Issues</option>
                   <option value="Others">Others</option>
                 </select>
+                <input class="d-none" type="hidden" id="incident-type" name="incident_type" value="">
                 <div class="position-absolute top-0 start-0" style="width: calc(100% - 40px); display: none;" id="others-incident-type-container">
                   <input type="text" class="form-control rounded-end-0 border-end-0" placeholder="Others" id="others-incident-type" value="">
                 </div>

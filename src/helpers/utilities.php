@@ -20,3 +20,13 @@ function generateBlotterCode($pdo) {
     $count = str_pad($stmt->fetch()['count'], 4, '0', STR_PAD_LEFT);
     return "BR-{$today}-{$count}";
 }
+
+
+
+function getOrdinal($number) {
+    $suffixes = ['th','st','nd','rd','th','th','th','th','th','th'];
+    if ((($number % 100) >= 11) && (($number % 100) <= 13))
+        return $number . 'th';
+    else
+        return $number . $suffixes[$number % 10];
+}

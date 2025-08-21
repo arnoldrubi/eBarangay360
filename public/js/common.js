@@ -57,3 +57,99 @@ function setupForEditAddressChain(provinceId, cityId, barangayId, provSelector, 
       });
     });
 }
+
+  
+function getOrdinal(number) {
+  const suffixes = ['th','st','nd','rd','th','th','th','th','th','th'];
+  if ((number % 100) >= 11 && (number % 100) <= 13) {
+    return number + 'th';
+  } else {
+    return number + suffixes[number % 10];
+  }
+}
+
+
+function toMonth(monthNumber) {
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  return months[monthNumber - 1] || "";
+}
+function printElem(element, callback) {
+  $("#printable-page").html("");
+  $(element).clone().appendTo("#printable-page");
+  if(callback){
+    callback($("#printable-page")[0]);
+  }
+  window.print();
+  return $("#printable-page");
+}
+
+// reusable function for print - plain text only
+function printModal(modalId) {
+    // Get modal content
+    const modal = document.getElementById(modalId);
+    const content = modal.querySelector('.modal-body').innerHTML; 
+    // You can also use `.modal-content` if you want the header/footer included
+
+    // Open a new window
+    const printWindow = window.open('', '', 'width=900,height=650');
+    
+    // Write modal content into new window
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print Certificate</title>
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                <style>
+                    body { font-family: 'Noto Sans', sans-serif; padding: 20px; }
+                </style>
+            </head>
+            <body>
+                ${content}
+            </body>
+        </html>
+    `);
+
+    // Close document & trigger print
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+}
+
+function printElementById(elementId, title = "Print Preview") {
+    const element = document.getElementById(elementId);
+    if (!element) {
+        console.error("Element not found: " + elementId);
+        return;
+    }
+
+    const printable = element.innerHTML;
+    const printWindow = window.open("", "_blank", "width=900,height=650");
+    printWindow.document.open();
+
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>${title}</title>
+                <!-- Bootstrap CSS -->
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+                <!-- Your custom theme.css -->
+                <link href="/public/css/theme.css" rel="stylesheet">
+                <style>
+                    body { font-family: 'Noto Sans', sans-serif; padding: 30px; }
+                    .a4 { width: 210mm; min-height: 297mm; margin: auto; }
+                </style>
+            </head>
+            <body onload="window.print(); window.close();">
+                <div class="a4">
+                    ${printable}
+                </div>
+            </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+}

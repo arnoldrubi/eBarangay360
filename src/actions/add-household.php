@@ -9,6 +9,7 @@ $ownership = clean($_POST['ownership_status']);
 $address_street = clean($_POST['present_street']);
 $address_zone = clean($_POST['present_zone']);
 $address_landmark = clean($_POST['present_landmark']);
+$notes = clean($_POST['notes']);
 $createdAt = date('Y-m-d H:i:s');
 
 $required = [
@@ -21,8 +22,8 @@ validateRequiredFields($required);
 
 try {
   $stmt = $pdo->prepare("
-    INSERT INTO households (household_code, head_id, ownership_status, address_street, address_zone, address_landmark, created_at)
-    VALUES (:name, :head, :ownership,:address_street,:address_zone,:address_landmark, :created_at)
+    INSERT INTO households (household_code, head_id, ownership_status, address_street, address_zone, address_landmark, notes, created_at)
+    VALUES (:name, :head, :ownership,:address_street,:address_zone,:address_landmark, :notes, :created_at)
   ");
   $stmt->execute([
     ':name' => $householdCode,
@@ -31,6 +32,7 @@ try {
     ':address_street' => $address_street,
     ':address_zone' => $address_zone,
     ':address_landmark' => $address_landmark,
+    ':notes' => $notes,
     ':created_at' => $createdAt
   ]);
 

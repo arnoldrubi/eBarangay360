@@ -60,6 +60,15 @@ switch ($page) {
     case 'edit-blotter-report':
         $view('edit-blotter-report', ['title' => 'Edit Blotter Report - eBarangay360']);
         break;
+    case 'barangay-certificates':
+        $view('barangay-certificates', ['title' => 'Barangay Certificates - eBarangay360']);
+        break;
+    case 'barangay-clearance':
+        $view('barangay-clearance', ['title' => 'Barangay Clearance - eBarangay360']);
+        break;
+    case 'barangay-certificate-of-indigency':
+        $view('barangay-certificate-of-indigency', ['title' => 'Barangay Indigency - eBarangay360']);
+        break;
     default:
         http_response_code(404);
         echo "404 Page Not Found";

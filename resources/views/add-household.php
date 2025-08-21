@@ -51,6 +51,15 @@
         </div>
       </div>
 
+      <!-- Notes text area -->
+     
+      <div class="card mb-4">
+        <div class="card-header fw-bold">Notes</div>
+        <div class="card-body row g-3">
+          <textarea id="notes" name="notes" class="form-control" rows="3" placeholder="Additional information about the household..."></textarea>
+        </div>
+      </div>
+
     <button type="submit" class="btn btn-primary">Add Household</button>
     <a href="index.php?page=households" class="btn btn-secondary">Cancel</a>
   </form>

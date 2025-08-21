@@ -7,6 +7,7 @@ $zone = $_POST['edit_zone'] ?? null;
 $street = $_POST['edit_street'] ?? null;
 $landmark = $_POST['edit_landmark'] ?? null;
 $ownership = $_POST['edit_ownership'] ?? null;
+$notes = $_POST['edit_notes'] ?? null;
 
 if (!$id) {
   echo 'Invalid household ID';
@@ -20,6 +21,7 @@ $stmt = $pdo->prepare("
     address_street = :street,
     address_landmark = :landmark,
     ownership_status = :ownership,
+    notes = :notes,
     updated_at = NOW()
   WHERE id = :id
 ");
@@ -30,6 +32,7 @@ $stmt->execute([
   ':street' => clean($street),
   ':landmark' => clean($landmark),
   ':ownership' => $ownership,
+  ':notes' => clean($notes),
   ':id' => $id
 ]);
 

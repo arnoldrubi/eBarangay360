@@ -75,15 +75,14 @@
               <th>Zone</th>
               <th>Landmark</th>
               <th>Total Members</th>
+              <th>Household Ownership Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            
-              <?php          
-              
-                $stmt = $pdo->query("
-                  SELECT 
+            <?php
+              $stmt = $pdo->query("
+                SELECT
                     h.id,
                     h.head_id,
                     h.household_code,
@@ -108,7 +107,8 @@
                 <td><?= htmlspecialchars($household['address_street']) ?></td>
                 <td><?= htmlspecialchars($household['address_zone']) ?></td>
                 <td><?= htmlspecialchars($household['address_landmark']) ?></td>
-                <td><?= $household['total_members'] + 1; //plus one to include the household head in the count ?></td> 
+                <td><?= $household['total_members'] + 1; //plus one to include the household head in the count ?></td>
+                <td><?= htmlspecialchars($household['ownership_status']) ?></td>
                 <td>
                   <a data-id="<?= $household['id'] ?>" data-bs-toggle="modal" data-bs-target="#editHouseholdModal" href="#" class="btn btn-sm btn-warning text-white edit-household-btn" title="Edit"><i class="material-symbols-outlined md-18">edit</i></a>
                   <a data-id="<?= $household['id'] ?>" data-bs-toggle="modal" data-bs-target="#manageMembersdModal" href="#" class="btn btn-sm btn-warning text-white manage-members-btn" title="Manage Members"><i class="material-symbols-outlined md-18">group</i></a>
@@ -195,7 +195,16 @@
             <label for="edit_landmark" class="form-label">Landmark</label>
             <input type="text" class="form-control" name="edit_landmark" id="edit_landmark">
           </div>
+          
+          <!-- Notes text area -->
+     
+          <div class="col-md-12 p2">
+            <label for="edit_notes" class="form-label">Notes</label>
+              <textarea id="edit_notes" name="edit_notes" class="form-control" rows="3" placeholder="Additional information about the household..."></textarea>
+          </div>
         </div>
+
+
 
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary">Update Household Info</button>
@@ -224,7 +233,7 @@
               <div class="mb-3 resident-dropdown row">
                 <div class="col-md-6">
                   <label for="residents[]" class="form-label">Select Member</label>
-                  <select name="residents[]" class="form-select resident-select" required>
+                  <select name="residents[]" class="form-select resident-select mb-2" required>
                     <option value="">-- Select Resident --</option>
                     <?php
                       $residents = $pdo->query("
@@ -245,8 +254,8 @@
                     <?php endforeach;
                     } ?>
                   </select>
-                  <div class="col-md-2">
-                    <button type="button" class="btn btn-danger btn-sm remove-member">Remove</button>
+                  <div class="col-md-3">
+                    <button type="button" class="btn btn-danger btn-sm remove-member"><i class="material-symbols-outlined md-18 text-light">contract_delete</i> Remove</button>
                   </div>
                 </div>
                 <div class="mb-3 resident-dropdown col-md-6">
@@ -266,12 +275,12 @@
           </div>
 
           <button type="button" class="btn btn-outline-primary" id="addMore">
-          <i class="fas fa-plus"></i> Add Member
+          <i class="material-symbols-outlined md-18 text-secondary">add_box</i> Add Member
           </button>
         </div>
         <div class="modal-footer">
           <div class="mt-4">
-            <button type="submit" class="btn btn-success">Save Members</button>
+            <button type="submit" class="btn btn-primary">Save Members</button>
           </div>
         </div>
       </form>

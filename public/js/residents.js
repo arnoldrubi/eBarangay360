@@ -271,7 +271,7 @@ $(document).ready(function () {
 
   $('.edit-btn').on('click', function () {
     const residentId = $(this).data('id');
-
+    alert(residentId);
     // Fetch data via AJAX
     $.get('../public/api/get-resident.php', { id: residentId }, function (data) {
       const res = JSON.parse(data);

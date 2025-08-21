@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
   <link href="css/custom.css" rel="stylesheet">
+  <link href="css/print.css" rel="stylesheet">
 </head>
 <body id="dashboard">
   <div class="container-fluid">
