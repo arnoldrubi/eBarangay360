@@ -296,7 +296,27 @@
     }
   }
 ?>
+<?php
+  if ($page === 'barangay-officials') {
+    ?>
+<script>
+    $('.delete-btn').on('click', function (e) {
+    e.preventDefault();
 
+    const id = $(this).data('id');
+    if (!confirm('Are you sure you want to delete this official?')) return;
+
+    $.post('../src/actions/delete-official.php', { id: id }, function (response) {
+      if (response === 'success') {
+        alert('Official deleted.');
+        location.reload(); // Or remove row via JS
+      } else {
+        alert('Failed to delete official: ' + response);
+      }
+    });
+  });
+</script>
+<?php } ?>
 </body>
 </html>
 

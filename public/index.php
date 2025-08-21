@@ -69,6 +69,8 @@ switch ($page) {
     case 'barangay-certificate-of-indigency':
         $view('barangay-certificate-of-indigency', ['title' => 'Barangay Indigency - eBarangay360']);
         break;
+    case 'barangay-officials':
+        $view('barangay-officials', ['title'=> 'Barangay Officials - eBarangay360']);
     default:
         http_response_code(404);
         echo "404 Page Not Found";

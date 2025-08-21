@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 20, 2025 at 04:39 AM
+-- Generation Time: Aug 21, 2025 at 06:45 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42133,6 +42133,102 @@ INSERT INTO `barangays` (`id`, `barangay_id`, `name`, `city_municipal_id`, `is_d
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `barangay_certificate_requests`
+--
+
+CREATE TABLE `barangay_certificate_requests` (
+  `id` int(11) NOT NULL,
+  `resident_id` int(11) NOT NULL,
+  `purpose` varchar(50) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `requested_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `barangay_certificate_requests`
+--
+
+INSERT INTO `barangay_certificate_requests` (`id`, `resident_id`, `purpose`, `status`, `requested_at`) VALUES
+(1, 10, '', 'approved', '2025-08-21 21:25:07'),
+(2, 29, 'For Employment', 'approved', '2025-08-21 21:27:18'),
+(3, 23, 'For NBI', 'approved', '2025-08-21 21:51:51'),
+(4, 10, 'for passport', 'approved', '2025-08-21 22:17:12'),
+(5, 23, 'For Police Clearance', 'approved', '2025-08-21 22:51:10');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `barangay_clearance_requests`
+--
+
+CREATE TABLE `barangay_clearance_requests` (
+  `id` int(11) NOT NULL,
+  `resident_id` int(11) NOT NULL,
+  `purpose` varchar(50) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `requested_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `barangay_clearance_requests`
+--
+
+INSERT INTO `barangay_clearance_requests` (`id`, `resident_id`, `purpose`, `status`, `requested_at`) VALUES
+(1, 23, 'For Business', 'approved', '2025-08-21 23:05:16'),
+(2, 10, 'Passport and Employment', 'approved', '2025-08-21 23:07:49'),
+(3, 10, 'For Medical Purpose', 'approved', '2025-08-21 23:22:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `barangay_indigency_requests`
+--
+
+CREATE TABLE `barangay_indigency_requests` (
+  `id` int(11) NOT NULL,
+  `resident_id` int(11) NOT NULL,
+  `purpose` varchar(50) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `requested_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `barangay_indigency_requests`
+--
+
+INSERT INTO `barangay_indigency_requests` (`id`, `resident_id`, `purpose`, `status`, `requested_at`) VALUES
+(1, 11, 'For Medical Purpose', 'approved', '2025-08-21 23:24:06'),
+(2, 12, 'for DSWD', 'approved', '2025-08-21 23:32:14');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `barangay_officials`
+--
+
+CREATE TABLE `barangay_officials` (
+  `id` int(11) NOT NULL,
+  `position` varchar(100) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `middle_name` varchar(100) DEFAULT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `suffix` varchar(20) DEFAULT NULL,
+  `order_no` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `barangay_officials`
+--
+
+INSERT INTO `barangay_officials` (`id`, `position`, `first_name`, `middle_name`, `last_name`, `suffix`, `order_no`, `created_at`, `updated_at`) VALUES
+(5, 'Barangay Captain', 'Danilo', '', 'Tayao', '', 1, '2025-08-21 16:43:05', '2025-08-21 16:43:05'),
+(6, 'Councilor', 'Ramil', 'Ramos', 'Olajay', '', 4, '2025-08-21 16:43:29', '2025-08-21 16:43:29');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `blotter_evidence_files`
 --
 
@@ -42157,7 +42253,11 @@ INSERT INTO `blotter_evidence_files` (`id`, `blotter_id`, `file_name`, `file_typ
 (10, 18, 'evidence_1755613122_68a487c2dbb37.jpg', '', '2025-08-19 22:18:42'),
 (11, 19, 'evidence_1755613555_68a489739d2ae.png', '', '2025-08-19 22:25:55'),
 (12, 19, 'evidence_1755614020_68a48b4475e5c.jpg', '', '2025-08-19 22:33:40'),
-(13, 21, 'evidence_1755653924_68a5272428f6e.png', '', '2025-08-20 09:38:44');
+(13, 21, 'evidence_1755653924_68a5272428f6e.png', '', '2025-08-20 09:38:44'),
+(14, 20, 'evidence_1755678666_68a587caa3c00.png', '', '2025-08-20 16:31:06'),
+(15, 16, 'evidence_1755695090_68a5c7f275e5c.png', '', '2025-08-20 21:04:50'),
+(16, 22, 'evidence_1755695220_68a5c874e63c1.png', '', '2025-08-20 21:07:00'),
+(17, 23, 'evidence_1755696118_68a5cbf6e1f8a.png', '', '2025-08-20 21:21:58');
 
 -- --------------------------------------------------------
 
@@ -42211,7 +42311,7 @@ CREATE TABLE `blotter_reports` (
   `incident_location` text DEFAULT NULL,
   `incident_description` text DEFAULT NULL,
   `blotter_code` varchar(50) DEFAULT NULL,
-  `status` enum('Pending','Under Investigation','Resolved','For Mediation') DEFAULT 'Pending',
+  `status` enum('Pending','For Schedule','Resolved','Ongoing') DEFAULT 'Pending',
   `note_on_evidence` varchar(255) DEFAULT NULL,
   `resolution` varchar(255) NOT NULL,
   `resolution_date` date DEFAULT NULL,
@@ -42226,15 +42326,17 @@ CREATE TABLE `blotter_reports` (
 
 INSERT INTO `blotter_reports` (`id`, `complainant_resident_id`, `complainant_first_name`, `complainant_middle_name`, `complainant_last_name`, `complainant_dob`, `complainant_gender`, `complainant_civil_status`, `complainant_phone`, `complainant_email`, `complainant_province`, `complainant_city`, `complainant_barangay`, `complainant_zone`, `complainant_street`, `complainant_landmark`, `suspect_resident_id`, `suspect_first_name`, `suspect_middle_name`, `suspect_last_name`, `suspect_dob`, `suspect_gender`, `suspect_civil_status`, `suspect_phone`, `suspect_email`, `suspect_province`, `suspect_city`, `suspect_barangay`, `suspect_zone`, `suspect_street`, `suspect_landmark`, `victim_first_name`, `victim_middle_name`, `victim_last_name`, `victim_age`, `involved_parties`, `attending_officer_first_name`, `attending_officer_middle_name`, `attending_officer_last_name`, `incident_type`, `date_of_incident`, `time_of_incident`, `incident_location`, `incident_description`, `blotter_code`, `status`, `note_on_evidence`, `resolution`, `resolution_date`, `created_at`, `updated_at`, `is_deleted`) VALUES
 (10, 11, 'encarnacion', 'lagrosas', 'Rubi', '1985-06-05', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0308', '030811', '030811016', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '1603', '160304', '160304005', 'I', 'Reyes Street', 'Near Elementary School', 'We are the world', 'We', 'wi', 1, 'Lorem Ipsum', 'Sec', 'SEC Middle', 'SEC Last', '2', '2025-08-03', '22:55:00', 'Malapit Lang', 'Lipsunm', 'BR-20250803-0001', 'Pending', NULL, 'dsaafdsafdsafdas', '2025-08-30', '2025-08-03 14:56:20', '2025-08-06 07:27:10', 1),
-(11, 12, 'Elijah Jared', 'lagrosas', 'Rubi', '2021-01-11', 'Male', 'Single', '09173238485', 'arnoldr@webpartnergroup.com', '1603', '160303', '160303006', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '1602', '160203', '160203009', 'I', 'Reyes Street', 'Near Elementary School', 'WA', 'We', 'wi', 1, 'Lorem Ipsum', 'Sec', 'SEC Middle', 'SEC Last', 'Choose an Incident Type', '2025-08-03', '22:55:00', 'Malapit Lang', 'Lipsunm dooood', 'BR-20250803-0002', 'For Mediation', NULL, 'dsaafdsafdsafdas', '2025-10-01', '2025-08-03 14:59:07', '2025-08-03 15:16:21', 0),
+(11, 12, 'Elijah Jared', 'lagrosas', 'Rubi', '2021-01-11', 'Male', 'Single', '09173238485', 'arnoldr@webpartnergroup.com', '1603', '160303', '160303006', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '1602', '160203', '160203009', 'I', 'Reyes Street', 'Near Elementary School', 'WA', 'We', 'wi', 1, 'Lorem Ipsum', 'Sec', 'SEC Middle', 'SEC Last', 'Choose an Incident Type', '2025-08-03', '22:55:00', 'Malapit Lang', 'Lipsunm dooood', 'BR-20250803-0002', '', NULL, 'dsaafdsafdsafdas', '2025-10-01', '2025-08-03 14:59:07', '2025-08-20 13:04:38', 1),
 (12, 0, 'dummy guest', 'NA', 'NA', '2022-08-19', 'Male', 'Single', '09173238485', 'arnold@gmail.com', '0308', '030807', '030807015', 'ASJ', '123', '456', NULL, 'Guest Suspect', 'NA', 'Guest Last Name', '2000-10-17', 'Female', 'Widow', '09173238485', 'sample@gmail.com', '1603', '160304', '160304003', '123', '6fgfds', '657fdhfd', 'LALA Land', 'NA', 'NO', 7, 'fdsafdas', 'sec', 'SEC Middle', 'sec last', 'Noise', '2025-08-03', '11:30:00', 'Placeholder', 'dsfdsafdsafdagfdgdsfdsg', 'BR-20250803-0099', 'Pending', NULL, 'fdadfdagradafdsafdsa', '2025-08-22', '0000-00-00 00:00:00', '2025-08-03 15:38:25', 1),
-(15, 21, 'Cardo', '', 'dalisay', '1990-01-01', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '1603', '160304', '160304004', 'I', 'Macopa', 'Baseco', NULL, 'Ginny', 'Georgia', 'Greene', '2002-12-31', 'Female', 'Married', '09173238485', 'arnold.wpg@gmail.com', '1401', '140105', '140105003', 'y', 'NA', 'NA', 'Imase', 'NA', 'NA', 19, 'gdafdsa', 'dfad', 'fdsafda', 'faddas', 'Crime', '2025-08-03', '08:09:00', 'NA', 'fdsfdsfdsa', 'BR-20250803-0003', 'Under Investigation', NULL, 'dfafdas', '2025-08-21', '2025-08-03 15:38:01', '2025-08-19 00:32:34', 1),
-(16, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Carding', '', 'Magno', '1989-03-27', 'Male', NULL, '09173238485', 'arnoldr@webpartnergroup.com', '1375', '137504', '137504003', 'II', 'III', 'NA', 'NA', 'NA', 'NA', 4, 'dfdasfdsafda', '', '', '', 'Others', '2025-08-13', '00:00:00', 'NA', 'dsfdsafdsfdsafdsa', 'BR-20250819-0001', 'For Mediation', NULL, 'fdafdafdasfdsa', '0000-00-00', '2025-08-19 01:13:37', '2025-08-19 01:13:58', 0),
-(17, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Carding', '', 'Magno', '1989-03-27', 'Male', 'Single', '09173238485', 'arnoldr@webpartnergroup.com', '1375', '137504', '137504003', 'II', 'III', 'NA', 'NA', 'NA', 'NA', 4, 'dfdasfdsafda', 'NA', 'NA', 'NA', 'Others', '2025-08-13', '00:00:00', 'NA', 'dsfdsafdsfdsafdsa', 'BR-20250819-0002', 'Pending', NULL, 'fdafdafdasfdsa', '2025-08-29', '2025-08-19 14:05:21', '2025-08-19 14:05:21', 0),
+(15, 21, 'Cardo', '', 'dalisay', '1990-01-01', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '1603', '160304', '160304004', 'I', 'Macopa', 'Baseco', NULL, 'Ginny', 'Georgia', 'Greene', '2002-12-31', 'Female', 'Married', '09173238485', 'arnold.wpg@gmail.com', '1401', '140105', '140105003', 'y', 'NA', 'NA', 'Imase', 'NA', 'NA', 19, 'gdafdsa', 'dfad', 'fdsafda', 'faddas', 'Crime', '2025-08-03', '08:09:00', 'NA', 'fdsfdsfdsa', 'BR-20250803-0003', '', NULL, 'dfafdas', '2025-08-21', '2025-08-03 15:38:01', '2025-08-19 00:32:34', 1),
+(16, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Carding', '', 'Magno', '1989-03-27', 'Male', 'Single', '09173238485', 'arnoldr@webpartnergroup.com', '1375', '137504', '137504003', 'II', 'III', 'NA', 'NA', 'NA', 'NA', 4, 'dfdasfdsafda', '', '', '', 'Others', '2025-08-13', '00:00:00', 'NA', 'dsfdsafdsfdsafdsa', 'BR-20250819-0001', '', '', 'fdafdafdasfdsa', '0000-00-00', '2025-08-19 01:13:37', '2025-08-20 13:15:50', 1),
+(17, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Carding', '', 'Magno', '1989-03-27', 'Male', 'Single', '09173238485', 'arnoldr@webpartnergroup.com', '1375', '137504', '137504003', 'II', 'III', 'NA', 'NA', 'NA', 'NA', 4, 'dfdasfdsafda', 'NA', 'NA', 'NA', 'Others', '2025-08-13', '00:00:00', 'NA', 'dsfdsafdsfdsafdsa', 'BR-20250819-0002', 'Ongoing', NULL, 'fdafdafdasfdsa', '2025-08-29', '2025-08-19 14:05:21', '2025-08-20 13:18:53', 0),
 (18, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', 'Select Province', '', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Carding', '', 'Magno', '1989-03-27', 'Male', 'Single', '09173238485', 'arnoldr@webpartnergroup.com', 'Select Province', '', '137504003', 'II', 'III', 'NA', 'NA', 'NA', 'NA', 4, 'dfdasfdsafda', 'NA', 'secretary middle name', 'secretary last name', 'Others', '2025-08-13', '00:00:00', 'NA', 'sample note on evidence', 'BR-20250819-0003', 'Pending', 'fdafdafadsfdasfdsafgda', 'fdafdafdasfdsa', '2025-08-19', '2025-08-19 14:09:31', '2025-08-19 14:18:42', 0),
-(19, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'encarnacion rubi', 'lagrosas', 'rubi', '1985-06-05', 'Female', 'Married', '09173238485', 'arnold.wpg@gmail.com', '0314', '031417', '031417007', 'I', 'Macopa Street', 'Donya Crispina Homes', 'Neneng', 'B', 'Uy', 6, 'gasdfdsafdsafdsasa', 'NA', 'NA', 'NA', 'Crime', '2025-08-19', '01:25:00', 'sa kanto', 'dsfdsafdsagfdgdfdsfsadadssa', 'BR-20250819-0004', 'For Mediation', 'dfdasfdasfdsa', 'fdsafdsafdasfdsafas', '2025-08-30', '2025-08-19 14:25:55', '2025-08-19 14:33:40', 0),
-(20, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Elijah Jared', 'lagrosas', 'Rubi', '2021-01-11', 'Male', 'Single', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', '', '', '', 0, '', '', '', '', 'Choose an Incident Type', '2025-08-20', '00:00:00', '', '', 'BR-20250820-0001', 'Pending', '', '', '0000-00-00', '2025-08-20 01:34:05', '2025-08-20 01:34:05', 0),
-(21, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Elijah Jared', 'lagrosas', 'Rubi', '2021-01-11', 'Male', 'Single', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', '', '', '', 0, '', '', '', '', 'Others', '2025-08-20', '13:00:00', '', '', 'BR-20250820-0002', 'For Mediation', '', 'yghuhujij', '2025-08-20', '2025-08-20 01:38:44', '2025-08-20 01:40:20', 0);
+(19, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'encarnacion rubi', 'lagrosas', 'rubi', '1985-06-05', 'Female', 'Married', '09173238485', 'arnold.wpg@gmail.com', '0314', '031417', '031417007', 'I', 'Macopa Street', 'Donya Crispina Homes', 'Neneng', 'B', 'Uy', 6, 'gasdfdsafdsafdsasa', 'NA', 'NA', 'NA', 'Crime', '2025-08-19', '01:25:00', 'sa kanto', 'dsfdsafdsagfdgdfdsfsadadssa', 'BR-20250819-0004', '', 'dfdasfdasfdsa', 'fdsafdsafdasfdsafas', '2025-08-30', '2025-08-19 14:25:55', '2025-08-20 13:15:46', 1),
+(20, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Cardo', '', 'dalisay', '1990-01-01', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '1339', '133901', '133901201', 'I', 'Macopa', 'Baseco', '', '', '', 0, 'fdrdgfdsg', '', '', '', 'Choose an Incident Type', '2025-08-20', '00:00:00', '', 'fddsgfdsg', 'BR-20250820-0001', 'Resolved', 'fdsfdsafdsa', 'fddsfsa', '2025-08-30', '2025-08-20 01:34:05', '2025-08-20 13:35:02', 0),
+(21, 10, 'Arnaldo', 'Bayaras', 'Rubi', '1984-01-03', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', NULL, 'Elijah Jared', 'lagrosas', 'Rubi', '2021-01-11', 'Male', 'Single', '09173238485', 'arnoldr@webpartnergroup.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', '', '', '', 0, 'dfasfdasf', 'NA', 'NBA', 'NB', 'Others', '2025-08-20', '13:00:00', '', 'dfdagdagdsfdsafdsa', 'BR-20250820-0002', '', 'sadfdgw', 'yghuhujij', '2025-08-20', '2025-08-20 01:38:44', '2025-08-20 13:15:29', 1),
+(22, 0, 'Guest Complainant', '', 'Guest Last Name', '1988-07-27', 'Female', 'Divorced', '09069665255', 'email@example.com', '1602', '160204', '160204011', 'I', 'I', 'I', NULL, 'Cardo', '', 'dalisay', '1990-01-01', 'Male', 'Married', '09173238485', 'arnoldr@webpartnergroup.com', '1339', '133901', '133901201', 'I', 'Macopa', 'Baseco', 'NA', 'NA', 'NA', 5, 'dfadfdsfads', '', '', '', 'Others', '2025-08-20', '01:45:00', 'NA', 'dfdsgfsaddasfafgfddsf\r\nfdgdsgsdfasgds\r\nfgdsfgfdsgfdsgfdsg\r\ngdsgfdsgfsgfdsgfsdg', 'BR-20250820-0003', 'Pending', 'dsafdasfagdgdsa\r\ndsafdasfadsfads', '', '0000-00-00', '2025-08-20 13:07:00', '2025-08-20 13:35:14', 0),
+(23, 23, 'Lilas YT', '', 'Ikuta', '2000-02-20', 'Female', 'Single', '09173238485', 'arnold.wpg@gmail.com', '1507', '150704', '150704003', 'I', 'Macopa', 'Sa Tabi', NULL, 'Arnold', 'Bayaras', 'Rubi', '1984-03-17', 'Male', 'Married', '09173238485', 'arnold.wpg@gmail.com', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', 'NA', 'NA', 'NA', 0, 'dsafdafdas', '', '', '', 'Others', '2025-08-30', '09:05:00', 'NA', 'fdafdafads', 'BR-20250820-0004', 'Pending', 'dsfdsafads', '', '0000-00-00', '2025-08-20 13:21:58', '2025-08-20 13:34:04', 0);
 
 -- --------------------------------------------------------
 
@@ -43962,11 +44064,8 @@ CREATE TABLE `households` (
 --
 
 INSERT INTO `households` (`id`, `household_code`, `head_id`, `address_street`, `address_zone`, `address_landmark`, `ownership_status`, `total_members`, `notes`, `created_at`, `updated_at`) VALUES
-(22, 'HH-20250801-001', 10, 'Reyes Street', 'I', 'Near Elementary School', 'Owned', 1, NULL, '2025-08-01 08:53:46', '2025-08-01 08:53:46'),
-(23, 'HH-20250801-002', 27, 'NA', 'y', 'NA', 'Rented', 1, NULL, '2025-08-01 11:17:54', '2025-08-12 09:04:16'),
-(25, 'HH-20250811-001', 20, 'Reyes Street', 'I', 'Near Elementary School', 'Owned', 1, NULL, '2025-08-11 16:32:41', '2025-08-12 09:04:23'),
-(26, 'HH-20250818-001', 25, 'Alex St', 'TY', 'IV', 'Rented', 1, NULL, '2025-08-18 23:35:37', '2025-08-18 23:35:37'),
-(27, 'HH-20250820-001', 10, 'Reyes Street', 'I', 'Near Elementary School', 'Rented', 1, NULL, '2025-08-20 09:44:49', '2025-08-20 09:44:49');
+(29, 'HH-20250820-001', 10, 'Reyes Street', 'I', 'Near Elementary School', 'Owned', 1, 'from agnaya', '2025-08-20 11:31:51', '2025-08-21 10:29:52'),
+(30, 'HH-20250820-002', 23, 'Macopa', 'I', 'Sa Tabi', 'Rented', 1, 'from poblacion', '2025-08-20 11:32:55', '2025-08-21 10:25:20');
 
 -- --------------------------------------------------------
 
@@ -43988,14 +44087,9 @@ CREATE TABLE `household_members` (
 --
 
 INSERT INTO `household_members` (`id`, `household_id`, `resident_id`, `relationship_to_head`, `created_at`, `updated_at`) VALUES
-(78, 23, 23, 'Child', '2025-08-01 11:18:08', '2025-08-01 11:18:08'),
-(87, 22, 11, 'Spouse', '2025-08-10 22:06:47', '2025-08-10 22:06:47'),
-(88, 22, 12, 'Child', '2025-08-10 22:06:47', '2025-08-10 22:06:47'),
-(89, 22, 13, 'Child', '2025-08-10 22:06:47', '2025-08-10 22:06:47'),
-(90, 25, 26, 'Parent', '2025-08-11 16:33:01', '2025-08-11 16:33:01'),
-(91, 25, 25, 'Other', '2025-08-11 16:33:01', '2025-08-11 16:33:01'),
-(92, 27, 18, 'Spouse', '2025-08-20 09:45:58', '2025-08-20 09:45:58'),
-(93, 27, 24, 'Child', '2025-08-20 09:45:58', '2025-08-20 09:45:58');
+(100, 29, 13, 'Child', '2025-08-20 11:43:29', '2025-08-20 11:43:29'),
+(101, 29, 12, 'Child', '2025-08-20 11:43:29', '2025-08-20 11:43:29'),
+(102, 29, 18, 'Spouse', '2025-08-20 11:43:29', '2025-08-20 11:43:29');
 
 -- --------------------------------------------------------
 
@@ -44164,8 +44258,8 @@ INSERT INTO `residents` (`id`, `user_id`, `first_name`, `middle_name`, `last_nam
 (12, NULL, 'Elijah Jared', 'lagrosas', 'Rubi', '2021-01-11', '0314', '031417', '031417021', 'Male', 'Single', 'arnoldr@webpartnergroup.com', '09173238485', 'Elijah', 'admin', '0314', '031417', '031417001', 'Macopa Street', 'NA', 'Donya Crispina Homes', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', 'resident_1751719387.png', 0, 0, 1, 0, '2025-07-05 06:43:07', '2025-07-29 06:52:48', 'National ID (PhilSys ID/ePhilID)', 'XXXX-XXX-XX'),
 (13, NULL, 'Albert Judah', 'lagrosas', 'Rubi', '2017-10-30', '0314', '031417', '031417021', 'Male', 'Single', 'arnoldr@webpartnergroup.com', '09173238485', 'aj', 'General Manager', '0314', '031417', '031417001', 'Macopa Street', 'i', 'Donya Crispina Homes', '0314', '031417', '031417011', 'i', 'Reyes Street', 'Near Elementary School', 'captured_1751723802.png', 0, 0, 1, 0, '2025-07-05 07:56:42', '2025-07-29 06:52:48', 'GSIS ID/UMID Card', 'XXXX-XXX-XX'),
 (14, NULL, '11.08-sample', 'Sample', 'Sample', '1986-07-18', '1602', '160201', '160201001', 'Male', 'Single', 'example@example.com', '09173238485', 'dsfda', 'NA', '1401', '140101', '140101001', 'iii', 'i', 'iiiifdasf', '1401', '140101', '140101001', 'i', 'iii', 'iiiifdasf', 'captured_1754900978.png', 0, 0, 1, 0, '2025-07-06 08:45:29', '2025-08-11 08:29:55', 'SSS ID/UMID Card', 'xxx'),
-(15, NULL, 'Sample Resident', 'Sample', 'Sample', '1984-07-18', '1602', '160201', '160201001', 'Male', 'Single', 'example@example.com', '09173238485', 'dsfda', 'NA', '1401', '140101', '140101001', 'iii', 'i', 'iiiifdasf', '1401', '140101', '140101001', 'i', 'iii', 'iiiifdasf', 'captured_1753169980.png', 0, 1, 1, 0, '2025-07-06 08:45:43', '2025-07-29 06:52:48', 'SSS ID/UMID Card', 'xxxxxx'),
-(18, NULL, 'encarnacion rubi', 'lagrosas', 'rubi', '1985-06-05', '0505', '050503', '050503002', 'Female', 'Married', 'arnold.wpg@gmail.com', '09173238485', 'NA', 'Admin', '0314', '031417', '031417011', 'f', 'y', 'd', '0314', '031417', '031417007', 'I', 'Macopa Street', 'Donya Crispina Homes', 'captured_1754881189.png', 0, 1, 1, 0, '2025-07-08 09:14:26', '2025-08-11 03:00:13', 'OWWA/iDOLE Card', 'XXXX-XXX-XX'),
+(15, NULL, 'Sample Resident', 'Sample', 'Sample', '1984-07-18', '1602', '160201', '160201001', 'Male', 'Single', 'example@example.com', '09173238485', 'dsfda', 'NA', '1401', '140101', '140101001', 'iii', 'i', 'iiiifdasf', '1401', '140101', '140101001', 'i', 'iii', 'iiiifdasf', 'captured_1753169980.png', 0, 1, 1, 1, '2025-07-06 08:45:43', '2025-08-20 03:21:45', 'SSS ID/UMID Card', 'xxxxxx'),
+(18, NULL, 'encarnacion rubi', 'lagrosas', 'rubi', '1985-06-05', '0505', '050503', '050503002', 'Female', 'Married', 'arnold.wpg@gmail.com', '09173238485', 'NA', 'Admin', '0314', '031417', '031417011', 'f', 'y', 'd', '0314', '031417', '031417007', 'I', 'Macopa Street', 'Donya Crispina Homes', 'captured_1754881189.png', 0, 1, 1, 1, '2025-07-08 09:14:26', '2025-08-20 03:21:55', 'OWWA/iDOLE Card', 'XXXX-XXX-XX'),
 (19, NULL, 'afdasf', 'fdaf', 'dfafda', '1984-04-01', '1401', '140102', '140102002', 'Male', 'Single', 'ejrubi30@gmail.com', '09173238485', 'Arnold', 'admin', '1401', '140101', '140101001', 'NA', 'NA', 'NA', '1401', '140101', '140101001', 'NA', 'NA', 'NA', 'resident_1752203229.jpg', 0, 0, 1, 0, '2025-07-10 21:07:09', '2025-07-29 06:52:48', 'Firearms License (PNP)', 'XXXX-XXX-XX'),
 (20, NULL, 'Ginny', 'Georgia', 'Greene', '2002-12-31', '0606', '060605', '060605001', 'Female', 'Married', 'arnold.wpg@gmail.com', '09173238485', 'TY', 'Tin can', '1043', '104301', '104301015', 'A', 'A', 'A', '1603', '160302', '160302002', 'y', 'NA', 'NA', 'captured_1752630443.png', 0, 0, 1, 0, '2025-07-11 09:53:56', '2025-07-16 01:47:23', 'GSIS ID/UMID Card', 'XXXX-XXX-XX'),
 (21, NULL, 'Cardo', '', 'dalisay', '1990-01-01', '0860', '086005', '086005004', 'Male', 'Married', 'arnoldr@webpartnergroup.com', '09173238485', 'Cardo', 'NA', '1339', '133901', '133901201', 'Macopa', 'I', 'Baseco', '1339', '133901', '133901201', 'I', 'Macopa', 'Baseco', 'captured_1752395330.png', 0, 0, 0, 0, '2025-07-13 02:28:50', '2025-07-29 06:53:39', 'National ID (PhilSys ID/ePhilID)', 'XXXX-XXX-XX'),
@@ -44175,7 +44269,7 @@ INSERT INTO `residents` (`id`, `user_id`, `first_name`, `middle_name`, `last_nam
 (25, NULL, 'Jason', 'Joe', 'Muggins', '1998-03-05', '1298', '129804', '129804005', 'Male', 'Single', 'arnold.wpg@gmail.com', '09173238485', 'Memeng', 'construction worker', '1018', '101804', '101804016', 'Alex St', 'TY', 'IV', '1018', '101804', '101804016', 'TY', 'Alex St', 'IV', 'captured_1752930785.png', 0, 0, 1, 0, '2025-07-19 07:13:05', '2025-07-19 13:32:16', 'NBI Clearance', 'xxxxxx11223'),
 (26, NULL, 'Juanb', 'D', 'Dela Cruz', '1990-01-17', '1401', '140105', '140105003', 'Male', 'Single', 'email@example.com', '09173238485', 'Juano', 'NA', '0314', '031417', '031417011', '', '', '', '0314', '031417', '031417011', 'I', 'NA', 'Malapit lang', 'resident_1754269724.png', 0, 1, 1, 1, '2025-08-03 19:08:44', '2025-08-04 07:25:27', 'SSS ID/UMID Card', 'XXXX-XXX-XX'),
 (27, NULL, 'Juan', 'D', 'Dela Cruz', '1995-01-25', '0434', '043411', '043411007', 'Male', 'Married', 'sample@gmail.com', '09173238485', 'Nonong', 'Manager', '0410', '041014', '041014005', 'Cosmos', 'I', 'Dyan lang', '0410', '041014', '041014005', 'I', 'Cosmos', 'Dyan lang', 'captured_1754273187.png', 0, 0, 1, 0, '2025-08-03 20:06:27', '2025-08-04 02:06:27', 'GSIS ID/UMID Card', 'XXXX-XXX-XX'),
-(28, NULL, 'Arnold', 'Bayaras', 'Rubi', '1984-03-17', '0314', '031403', '031403021', 'Male', 'Married', 'arnold.wpg@gmail.com', '09173238485', 'Arnold', 'Developer', '0314', '031417', '031417011', 'Reyes Street', 'I', 'Near Elementary School', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', 'captured_1755653239.png', 0, 0, 1, 0, '2025-08-19 19:27:19', '2025-08-20 01:27:19', 'Philippine Passport', 'XXXX-XXX-XX'),
+(28, NULL, 'Arnold', 'Bayaras', 'Rubi', '1984-03-17', '0314', '031403', '031403021', 'Male', 'Married', 'arnold.wpg@gmail.com', '09173238485', 'Arnold', 'Developer', '0314', '031417', '031417011', 'Reyes Street', 'I', 'Near Elementary School', '0314', '031417', '031417011', 'I', 'Reyes Street', 'Near Elementary School', 'captured_1755653239.png', 0, 0, 1, 1, '2025-08-19 19:27:19', '2025-08-21 12:44:03', 'Philippine Passport', 'XXXX-XXX-XX'),
 (29, NULL, 'Ramil', 'Olajay', 'Ramos', '1978-02-07', '0314', 'Select City', 'Select City', 'Male', 'Single', 'ramilolajayramos@gmail.com', '09566057390', '', '', '0314', '031417', '031417011', 'p', 'Purok 2', '', '0314', '031417', '031417011', 'Purok 2', 'p', '', 'captured_1755655257.png', 0, 0, 1, 0, '2025-08-19 20:00:57', '2025-08-20 02:00:57', 'Driver&#039;s License', '000000-');
 
 -- --------------------------------------------------------
@@ -44230,6 +44324,30 @@ ALTER TABLE `announcements`
 -- Indexes for table `barangays`
 --
 ALTER TABLE `barangays`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `barangay_certificate_requests`
+--
+ALTER TABLE `barangay_certificate_requests`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `barangay_clearance_requests`
+--
+ALTER TABLE `barangay_clearance_requests`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `barangay_indigency_requests`
+--
+ALTER TABLE `barangay_indigency_requests`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `barangay_officials`
+--
+ALTER TABLE `barangay_officials`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -44326,16 +44444,40 @@ ALTER TABLE `barangays`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42036;
 
 --
+-- AUTO_INCREMENT for table `barangay_certificate_requests`
+--
+ALTER TABLE `barangay_certificate_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `barangay_clearance_requests`
+--
+ALTER TABLE `barangay_clearance_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `barangay_indigency_requests`
+--
+ALTER TABLE `barangay_indigency_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `barangay_officials`
+--
+ALTER TABLE `barangay_officials`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT for table `blotter_evidence_files`
 --
 ALTER TABLE `blotter_evidence_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `blotter_reports`
 --
 ALTER TABLE `blotter_reports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `certificates`
@@ -44359,13 +44501,13 @@ ALTER TABLE `health_records`
 -- AUTO_INCREMENT for table `households`
 --
 ALTER TABLE `households`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `household_members`
 --
 ALTER TABLE `household_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT for table `provinces`
