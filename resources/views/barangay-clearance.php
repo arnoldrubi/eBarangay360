@@ -160,12 +160,12 @@
                         <img src="" alt="" class="img-fluid">
                         <div class="border border-success border-4 opacity-75 my-3 rounded"></div>
                             <div class="mb-5 text-center">
-                                <u>Hon. Danilo Tayao</u> <br>
+                                <u class="punong-barangay-placeholder"></u> <br>
                                 <i><small>Punong Barangay</small></i>
                             </div>
 
                             <div class="mb-3 text-center">
-                                <u>Kagawad Name</u> <br>
+                                <u class="kagawad-name-placeholder"></u> <br>
                                 <i><small>Barangay Kagawad</small></i>
                             </div>
                         </div>
@@ -209,7 +209,7 @@
                         <div class="float-end pt-5">
                             <div class="d-flex flex-column align-items-center py-5">
                                 <div class="border-bottom border-dark border-1" style="color: transparent;"> _________________________</div>
-                                <div class="text-center">Mr. Danilo Tayao</div>
+                                <div class="text-center punong-barangay-placeholder">Mr. Danilo Tayao</div>
                                 <div>Punong Barangay</div>
                             </div>
                         </div>

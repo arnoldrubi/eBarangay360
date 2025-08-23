@@ -153,3 +153,4 @@ function printElementById(elementId, title = "Print Preview") {
 
     printWindow.document.close();
 }
+

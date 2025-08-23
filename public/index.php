@@ -71,6 +71,16 @@ switch ($page) {
         break;
     case 'barangay-officials':
         $view('barangay-officials', ['title'=> 'Barangay Officials - eBarangay360']);
+        break;
+    case 'announcements':
+        $view('announcements', ['title'=> 'Announcements - eBarangay360']);
+        break;
+    case 'add-announcement':
+        $view('add-announcement', ['title'=> 'Add Announcement - eBarangay360']);
+        break;
+    case 'edit-announcement':
+        $view('edit-announcement', ['title'=> 'Edit Announcement - eBarangay360']);
+        break;
     default:
         http_response_code(404);
         echo "404 Page Not Found";

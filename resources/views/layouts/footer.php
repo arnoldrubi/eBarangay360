@@ -5,12 +5,6 @@
     </div>
   </div>
       
-  <!-- Bootstrap JS -->
-  <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script> -->
   
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -23,10 +17,64 @@
   <script src="<?= BASE_URL ?>/js/residents.js"></script>
   <?php elseif ($page === 'add-new-blotter-report' || $page === 'blotter-reports' || $page === 'edit-blotter-report') : ?>
     <script src="<?= BASE_URL ?>js/blotter-reports.js"></script>
+    <script>
+      
+      let barangayCaptain = '';
+      let barangayLuponNgTagapamayapa = '';
+
+      // call the get-barangay-officials.php to get all barangay officials names and positions
+      $.get('../public/api/get-barangay-officials.php', function (data) {
+        const officials = JSON.parse(data);
+        const brgyCaptainPlaceholder = $('.punong-barangay-placeholder');
+        const luponNgTagapamayapaPlaceholder = $('.lupon-ng-tagapamayapa-placeholder');
+        officials.forEach(function (official) {
+          if (official.position === 'Barangay Captain') {
+            barangayCaptain = `${official.first_name} ${official.last_name}`;
+            brgyCaptainPlaceholder.text(barangayCaptain);
+          }
+          else if (official.position === 'Lupon ng Tagapamayapa') {
+            barangayLuponNgTagapamayapa = `${official.first_name} ${official.last_name}`;
+            luponNgTagapamayapaPlaceholder.text(barangayLuponNgTagapamayapa);
+          }
+        });
+      });
+    </script>
   <?php elseif ($page === 'households' || $page === 'add-household' || $page === 'add-household-members') : ?>
     <script src="<?= BASE_URL ?>js/households.js"></script>
   <?php elseif ($page === 'barangay-certificates' || $page === 'barangay-clearance' || $page === 'barangay-certificate-of-indigency') : ?>
   <script src="<?= BASE_URL ?>js/barangay-certificates.js"></script>
+  <script>
+
+    let barangayCaptain = '';
+    let barangaySecretary = '';
+    let barangayLuponNgTagapamayapa = '';
+    let barangayTreasurer = '';
+    let barangayKagawad = [];
+
+    // call the get-barangay-officials.php to get all barangay officials names and positions
+    $.get('../public/api/get-barangay-officials.php', function (data) {
+      const officials = JSON.parse(data);
+      const brgyCaptainPlaceholder = $('.punong-barangay-placeholder');
+      const kagawadPlaceholder = $('.kagawad-name-placeholder');
+      const luponNgTagapamayapaPlaceholder = $('.lupon-ng-tagapamayapa-placeholder');
+      officials.forEach(function (official) {
+        if (official.position === 'Barangay Captain') {
+          barangayCaptain = `${official.first_name} ${official.last_name}`;
+          brgyCaptainPlaceholder.text(barangayCaptain);
+        } else if (official.position === 'Barangay Secretary') {
+          barangaySecretary = `${official.first_name} ${official.last_name}`;
+        } else if (official.position === 'Barangay Treasurer') {
+          barangayTreasurer = `${official.first_name} ${official.last_name}`;
+        } else if (official.position === 'Kagawad') {
+          barangayKagawad.push(`${official.first_name} ${official.last_name}`);
+          kagawadPlaceholder.html(barangayKagawad.join('<br>'));
+        }
+        else if (official.position === 'Lupon ng Tagapamayapa') {
+          barangayLuponNgTagapamayapa = `${official.first_name} ${official.last_name}`;
+        }
+      });
+    });
+  </script>
   <?php endif; ?>
 
   <?php if ($page === 'add-household-members' || $page === 'households') : ?>

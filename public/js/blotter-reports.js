@@ -88,3 +88,4 @@ $(document).ready(function() {
     modalBody.find('.blotter-code-placeholder').text(blotterCode);
   });
 });
+

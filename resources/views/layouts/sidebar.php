@@ -15,5 +15,12 @@
     <li class="nav-item mb-2"><a href="?page=blotter-reports" class="nav-link <?php echo $page === 'blotter-reports' || $page === 'add-new-blotter-report' || $page === 'edit-blotter-report' ? 'active' : ''; ?>"><i class="material-symbols-outlined md-18">record_voice_over</i>Blotter/Incidents</a></li>
     <li class="nav-item mb-2"><a href="?page=barangay-officials" class="nav-link <?php echo $page === 'barangay-officials' ? 'active' : ''; ?>"><i class="material-symbols-outlined md-18">gavel</i>Barangay Officials</a></li>
   </ul>
+  <hr>
+  <p class="text-light text-center">Site Admin</p>
+  <ul class="nav flex-column">
+    <ul class="nav flex-column">
+    <li class="nav-item mb-2"><a href="?page=dashboard" class="nav-link <?php echo $page === 'dashboard' ? 'active' : ''; ?>"><i class="material-symbols-outlined md-18">identity_platform</i>Users</a></li>
+    <li class="nav-item mb-2"><a href="?page=announcements" class="nav-link <?php echo $page === 'announcements' ? 'active' : ''; ?>"><i class="material-symbols-outlined md-18">settings</i>Site Settings</a></li>
+  </ul>
 </nav>
 

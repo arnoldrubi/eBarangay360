@@ -360,12 +360,12 @@
               <div class="">
               <div class="row">
                   <div class="offset-6 col-6">
-                      <div class="text-center underlined-field">
-                          Mr. Danilo Tayao
+                      <div class="text-center underlined-field punong-barangay-placeholder">
+                          
                       </div>
                       <div class="fw-semibold text-center">Barangay Captain</div>
-                      <div class="underlined-field mt-3 text-center">
-                          Lupon ng Tagapamayapa [Name]
+                      <div class="underlined-field lupon-ng-tagapamayapa-placeholder mt-3 text-center">
+                          
                       </div>
                       <div class="fw-semibold text-center">Lupon ng Tagapamayapa</div>
                   </div>
@@ -455,12 +455,12 @@
                 <div class="">
                 <div class="row">
                     <div class="offset-6 col-6">
-                        <div class="underlined-field text-center">
-                            Mr. Danilo Tayao
+                        <div class="underlined-field text-center punong-barangay-placeholder">
+                          
                         </div>
                         <div class="fw-semibold text-center">Barangay Captain</div>
-                        <div class="underlined-field mt-3 text-center">
-                            Lupon ng Tagapamayapa [Name]
+                        <div class="underlined-field mt-3 text-center lupon-ng-tagapamayapa-placeholder">
+                            
                         </div>
                         <div class="fw-semibold text-center">Lupon ng Tagapamayapa</div>
                     </div>
@@ -558,12 +558,12 @@
               <div class="">
               <div class="row">
                   <div class="offset-6 col-6">
-                      <div class="underlined-field text-center">
-                        Mr. Danilo Tayao
+                      <div class="underlined-field text-center punong-barangay-placeholder">
+                        
                       </div>
                       <div class="fw-semibold text-center">Barangay Captain</div>
-                      <div class="underlined-field mt-3 text-center">
-                        Lupon ng Tagapamayapa [Name]
+                      <div class="underlined-field mt-3 text-center lupon-ng-tagapamayapa-placeholder">
+
                       </div>
                       <div class="fw-semibold text-center">Lupon ng Tagapamayapa</div>
                   </div>
@@ -693,12 +693,12 @@
               <div class="">
                 <div class="row">
                     <div class="offset-6 col-6">
-                        <div class="underlined-field text-center">
-                            Mr. Danilo Tayao
+                        <div class="underlined-field text-center punong-barangay-placeholder">
+                            
                         </div>
                         <div class="fw-semibold text-center">Barangay Captain</div>
-                        <div class="underlined-field mt-3 text-center">
-                            Lupon ng Tagapamayapa [name]
+                        <div class="underlined-field mt-3 text-center lupon-ng-tagapamayapa-placeholder">
+                            
                         </div>
                         <div class="fw-semibold text-center">Lupon ng Tagapamayapa</div>
                     </div>
@@ -796,11 +796,11 @@
               <div class="">
               <div class="row">
                   <div class="offset-6 col-6">
-                      <div class="underlined-field text-center">
-                        Mr. Danilo Tayao
+                      <div class="underlined-field text-center punong-barangay-placeholder">
+                        
                       </div>
                       <div class="fw-semibold text-center">Barangay Captain</div>
-                      <div class="underlined-field mt-3 text-center">
+                      <div class="underlined-field mt-3 text-center lupon-ng-tagapamayapa-placeholder">
                           Lupon ng Tagapamayapa [Name]
                       </div>
                       <div class="fw-semibold text-center">Lupon ng Tagapamayapa</div>
