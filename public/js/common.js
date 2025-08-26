@@ -154,3 +154,14 @@ function printElementById(elementId, title = "Print Preview") {
     printWindow.document.close();
 }
 
+
+// call the get-barangay-officials.php to get all barangay officials names and positions
+// $.get('../public/api/get-barangay-officials.php', function (data) {
+//   const officials = JSON.parse(data);
+//   const officialList = $('#official-list');
+//   officialList.empty();
+//   officials.forEach(function (official) {
+//     officialList.append(`<li>${official.name} - ${official.position}</li>`);
+//     console.log(`Added official: ${official.first_name} - ${official.position}`);
+//   });
+// });

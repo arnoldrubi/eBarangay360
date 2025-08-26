@@ -10,7 +10,7 @@ require_once '../helpers/validations.php';
 $required = [
   'first_name', 'last_name', 'birthdate', 'gender',
   'civil_status', 'present_province', 'present_city',
-  'present_barangay', 'pres_zone', 'phone', 'permanent_province',
+  'present_barangay', 'present_zone', 'phone', 'permanent_province',
   'permanent_city', 'permanent_barangay', 'email'
 ];
 
@@ -70,7 +70,7 @@ $stmt = $pdo->prepare("
     place_of_birth_province, place_of_birth_city_municipality, place_of_birth_barangay,
     permanent_province, permanent_city_municipality, permanent_barangay, permanent_street, permanent_zone, permanent_landmark,
     present_province, present_city_municipality, present_barangay, present_street, present_zone, present_landmark,
-    alive, valid_id_type, valid_id_number, photo_filename, created_at, unemployed
+    alive, valid_id_type, valid_id_number, photo_filename, created_at, unemployed, status, registration_source
   ) VALUES (
     :fname, :mname, :lname,
     :birthdate, :gender, :cstatus, :phone,
@@ -78,7 +78,7 @@ $stmt = $pdo->prepare("
     :birth_prov, :birth_city, :birth_barangay,
     :perm_prov, :perm_city, :perm_brgy, :perm_street, :perm_zone, :perm_landmark,
     :pres_prov, :pres_city, :pres_brgy, :pres_street, :pres_zone, :pres_landmark,
-    :status, :idtype, :idnum, :photo, :created_at, :unemployed
+    :status, :idtype, :idnum, :photo, :created_at, :unemployed, :status, :registration_source
   )
 ");
 
@@ -115,7 +115,9 @@ $stmt->execute([
   ':idtype' => clean($_POST['valid_id_type']),
   ':idnum' => clean($_POST['valid_id_number']),
   ':photo' => $photoName,
-  ':created_at' => date('Y-m-d H:i:s')
+  ':created_at' => date('Y-m-d H:i:s'),
+  ':registration_source' => 'admin',
+  ':status' => 'approved'
 ]);
 
 header('Location: ../../public/index.php?page=residents&success=1');

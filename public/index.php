@@ -81,6 +81,30 @@ switch ($page) {
     case 'edit-announcement':
         $view('edit-announcement', ['title'=> 'Edit Announcement - eBarangay360']);
         break;
+    case 'view-announcement':
+        $view('view-announcement', ['title'=> 'View Announcement - eBarangay360']);
+        break;
+    case 'all-announcements':
+        $view('all-announcements', ['title'=> 'All Announcements - eBarangay360']);
+        break;
+    case 'manage-account':
+        $view('manage-account', ['title'=> 'Manage Account - eBarangay360']);
+        break;
+    case 'manage-users':
+        $view('manage-users', ['title'=> 'Manage Users - eBarangay360']);
+        break;
+    case 'add-new-user':
+        $view('add-new-user', ['title'=> 'Add New User - eBarangay360']);
+        break;
+    case 'edit-user':
+        $view('edit-user', ['title'=> 'Edit User - eBarangay360']);
+        break;
+    case 'residents-registration':
+        $view('residents-registration', ['title'=> 'Residents Registration - eBarangay360']);
+        break;
+    case 'logout':
+        $view('logout', ['title'=> 'Logout - eBarangay360']);
+        break;
     default:
         http_response_code(404);
         echo "404 Page Not Found";

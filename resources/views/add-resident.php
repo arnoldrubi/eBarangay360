@@ -1,3 +1,7 @@
+<?php
+  require_once '../src/helpers/utilities.php';
+  requireRoles(['admin', 'secretary']);
+?>
 <main class="col-md-10 ms-sm-auto px-md-4 py-4">
   <div class="row mb-3">
     <h1 class="m-0">Add New Resident</h1>
@@ -251,8 +255,8 @@
           </div>
 
           <div class="col-md-6">
-              <input type="file" name="photo" accept="image/*" class="form-control">
-              <small class="text-muted">It is recommended when uploading a photo to select one with a 1x1 dimension</small>
+              <input type="file" name="photo" accept="image/*" class="d-none form-control">
+              <small class="text-muted d-none">It is recommended when uploading a photo to select one with a 1x1 dimension</small>
           </div>
         </div>
       </div>

@@ -10,12 +10,7 @@
   <div class="card container rounded-4 shadow" >
     <div class="card-body p-0">
       <div class="row" style="min-height: 90vh;">
-        <div class="col-12 col-md-8 rounded-start bg-primary row m-0" style="
-          background-image: url('<?=base_url()?>assets/media/wave-bg.svg');
-          background-size: cover;
-          background-repeat: no-repeat; 
-          --bs-border-radius: 1rem !important;
-          ">
+        <div class="col-12 col-md-8 rounded-start bg-primary row m-0">
           <div class="col-4 col-md-6 offset-0 offset-md-3 d-flex">
             <img src="assets/media/baliwag-logo-dark.png" class="img-fluid my-auto" style="" alt="">
           </div>
@@ -61,9 +56,9 @@
               <small class="card-title text-center flex-grow-1 text-nowrap mx-2">Log In</small>        
               <hr class="w-100">
             </div>
-            <form id="login-form">
+            <form id="login-form" method="POST" action="actions/login.php">
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control border-end-0" id="email" name="email" required placeholder="Email"/>
+                  <input type="text" class="form-control border-end-0" id="username" name="username" required placeholder="Email"/>
                   <span class="input-group-text fw-bold bg-white text-primary text-opacity-75">@</span>
                 </div>
                 <div class="mb-1">

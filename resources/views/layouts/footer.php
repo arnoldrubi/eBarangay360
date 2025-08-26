@@ -365,6 +365,30 @@
   });
 </script>
 <?php } ?>
+
+<?php
+  if ($page === 'manage-users') {
+    ?>
+  <script>
+  $('.user-delete-btn').on('click', function (e) {
+      e.preventDefault();
+
+      const user_id = $(this).data('user-id');
+      if (!confirm('Are you sure you want to delete this user?')) return;
+
+      $.post('../src/actions/delete-user.php', { user_id: user_id }, function (response) {
+      if (response === 'success') {
+        alert('user deleted.');
+        location.reload(); // Or remove row via JS
+      } else {
+        alert('Failed to delete user: ' + response);
+      }
+    });
+  });
+
+  </script>
+<?php } ?>
+
 </body>
 </html>
 

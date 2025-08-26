@@ -31,6 +31,8 @@
       $present_street = $household['address_street'] ?? '';
       $present_landmark = $household['address_landmark'] ?? '';
   }
+  require_once '../src/helpers/utilities.php';
+  requireRoles(['admin', 'secretary']);
 ?>
 <main class="col-md-10 ms-sm-auto px-md-4 py-4">
   <div class="row mb-3">

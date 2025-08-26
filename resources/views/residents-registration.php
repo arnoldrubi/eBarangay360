@@ -19,19 +19,19 @@
 
 <main id="residents-dashboard" class="col-md-10 ms-sm-auto px-md-4 py-4">
   <div class="row mb-3">
-    <h1 class="m-0">Resident Information</h1>
+    <h1 class="m-0">Manage Resident Signups</h1>
     <hr>
   </div>
 
   <!-- Demographics Summary -->
-  <div class="row mb-4">
+  <div class="row mb-4 justify-content-center d-flex">
     <div class="col-md-3">
       <div class="card text-center">
-        <div id="card-senior" class="card-body residents-dashboard-card">
-          <div class="icon p-3 icon-shape text-warning-emphasis rounded-circle shadow-sm">
-            <i class="material-symbols-outlined md-36">elderly</i>
+        <div id="card-minors" class="card-body residents-dashboard-card">
+          <div class="icon p-3 icon-shape text-warning-emphasis rounded-circle bg-warning-subtle  shadow-sm">
+            <i class="material-symbols-outlined md-36">pending</i>
           </div>
-          <h6 class="mb-0">Total Senior Citizens</h6>
+          <h6 class="mb-0">Awaiting Approval</h6>
           <h4 class="mt-0"><?= $senior ?></h4>
         </div>
       </div>
@@ -39,42 +39,19 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body residents-dashboard-card">
-          <div id="card-minors" class="icon p-3 icon-shape bg-warning-subtle text-warning-emphasis rounded-circle shadow-sm">
-            <i class="material-symbols-outlined md-36">child_care</i>
+          <div id="card-male" class="icon p-3 icon-shape bg-primary-subtle text-warning-emphasis rounded-circle shadow-sm">
+            <i class="material-symbols-outlined md-36">check_small</i>
           </div>
-          <h6 class="mb-0">Total Minors (<18)</h6>
+          <h6 class="mb-0">Approved</h6>
           <h4 class="mt-0"><?= $minors ?></h4>
         </div>
       </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center">
-        <div id="card-male" class="card-body residents-dashboard-card">
-          <div id="card-male" class="icon p-3 icon-shape bg-success-subtle text-success-emphasis rounded-circle shadow-sm">
-            <i class="material-symbols-outlined md-36">male</i>
-          </div>          
-          <h6 class="mb-0">Total Male</h6>
-          <h4 class="mt-0"><?= $male ?></h4>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center">
-        <div id="card-female" class="card-body residents-dashboard-card">
-          <div id="card-female" class="icon p-3 icon-shape bg-danger-subtle text-danger-emphasis rounded-circle shadow-sm">
-            <i class="material-symbols-outlined md-36">female</i>
-          </div>
-          <h6 class="mb-0">Total Female</h6>
-          <h4 class="mt-0"><?= $female ?></h4>
-        </div>
-      </div>
-    </div>
   </div>
 
   <section class="inner-content">
     <div class="container-fluid p-3">
       <h3 class="mb-4">Residents List</h3>
-      <p class="text-muted mb-3">Here you can view and manage the list of residents in your barangay.</p>
+      <p class="text-muted mb-3">Approve or delete the resident's registration.</p>
   <!-- Add Resident Button -->
   <div class="row mb-3">
     <div class="col-md-7 gap-2 mb-3 d-flex align-items-center">
@@ -121,7 +98,7 @@
           
           <?php
 
-            $stmt = $pdo->query("SELECT id, first_name, last_name, middle_name, date_of_birth, present_zone, present_street, gender, alive FROM residents WHERE is_deleted = 0");
+            $stmt = $pdo->query("SELECT id, first_name, last_name, middle_name, date_of_birth, present_zone, present_street, gender, alive FROM residents WHERE is_deleted = 0 AND status = 'pending' AND registration_source = 'public'");
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               $current_age = date_diff(date_create($row['date_of_birth']), date_create('today'))->y;
             ?>

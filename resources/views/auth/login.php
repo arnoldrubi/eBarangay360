@@ -31,10 +31,10 @@
                 <small class="card-title text-center flex-grow-1 text-nowrap mx-2">Log In</small>        
                 <hr class="w-100">
               </div>
-              <form id="login-form">
+              <form id="login-form" method="POST" action="../src/actions/login.php">
                   <div class="input-group mb-3">
-                    <input type="text" class="form-control border-end-0" id="email" name="email" required placeholder="Email or Username"/>
-                    <span class="input-group-text fw-bold bg-white text-primary text-opacity-75"><i class="material-symbols-outlined md-24 text-primary">alternate_email</i></span>
+                    <input type="text" class="form-control border-end-0" id="username" name="username" required placeholder="Username"/>
+                    <span class="input-group-text fw-bold bg-white text-primary text-opacity-75"><i class="material-symbols-outlined md-24 text-primary">account_box</i></span>
                   </div>
                   <div class="mb-1">
                     <div class="input-group">
@@ -42,12 +42,17 @@
                       <span class="input-group-text fw-bold bg-white text-primary text-opacity-75"><i class="bi bi-unlock-fill"></i></span>
                     </div>
                   </div>
-                  <div style="visibility: hidden;" id="login-form-error-handler" class="alert alert-danger p-1 text-center alert-dismissible fade show" role="alert">
-                    <small>
-                    <i class="bi bi-exclamation-triangle-fill"></i>
-                      Incorrect credentials
-                    </small>
-                  </div>
+
+                  <?php 
+                  if (isset($_GET['loginerror']) && $_GET['loginerror'] == 1): ?>
+                    <div id="login-form-error-handler" class="alert alert-danger p-1 text-center alert-dismissible fade show" role="alert">
+                      <small>
+                      <i class="bi bi-exclamation-triangle-fill"></i>
+                        Incorrect credentials
+                      </small>
+                    </div>
+                  <?php endif; ?>
+                  
                   <div class="form-check mt-3">
                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="checkboxTrue()">
                       <label class="text-left form-check-label small" for="flexCheckDefault">

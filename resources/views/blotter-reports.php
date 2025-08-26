@@ -15,6 +15,8 @@
   $stmt = $pdo->query("SELECT COUNT(*) FROM blotter_reports WHERE status = 'Ongoing' AND is_deleted = 0");
   $totalForOngoing = $stmt->fetchColumn();
 
+  requireRoles(['admin', 'secretary']);
+
 ?>
 
 <main class="col-md-10 ms-sm-auto px-md-4 py-4">

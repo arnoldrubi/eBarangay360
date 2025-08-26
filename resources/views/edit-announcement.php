@@ -19,6 +19,9 @@
     // Assign to variables
     extract($announcement); // This creates variables like $post_title, $post_body, etc.
 
+  require_once '../src/helpers/utilities.php';
+  requireRoles(['admin', 'secretary']);
+
 ?>
 <main class="col-md-10 ms-sm-auto px-md-4 py-4">
 

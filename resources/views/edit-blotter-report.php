@@ -1,28 +1,31 @@
 <?php
-require '../config/database.php';
+  require '../config/database.php';
 
-$blotter_id = $_GET['blotter_id'] ?? null;
+  $blotter_id = $_GET['blotter_id'] ?? null;
 
-if (!$blotter_id) {
-    die("Missing blotter ID.");
-}
+  if (!$blotter_id) {
+      die("Missing blotter ID.");
+  }
 
-// Fetch the blotter record
-$stmt = $pdo->prepare("SELECT * FROM blotter_reports WHERE id = ?");
-$stmt->execute([$blotter_id]);
-$blotter = $stmt->fetch(PDO::FETCH_ASSOC);
+  // Fetch the blotter record
+  $stmt = $pdo->prepare("SELECT * FROM blotter_reports WHERE id = ?");
+  $stmt->execute([$blotter_id]);
+  $blotter = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$blotter) {
-    die("Blotter record not found.");
-}
+  if (!$blotter) {
+      die("Blotter record not found.");
+  }
 
-// Assign to variables
-extract($blotter); // This creates variables like $complainant_first_name, $suspect_city, etc.
+  // Assign to variables
+  extract($blotter); // This creates variables like $complainant_first_name, $suspect_city, etc.
 
-// get blotter evidence from the database
-$stmt = $pdo->prepare("SELECT * FROM blotter_evidence_files WHERE blotter_id = ?");
-$stmt->execute([$blotter_id]);
-$evidence = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  // get blotter evidence from the database
+  $stmt = $pdo->prepare("SELECT * FROM blotter_evidence_files WHERE blotter_id = ?");
+  $stmt->execute([$blotter_id]);
+  $evidence = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  require_once '../src/helpers/utilities.php';
+  requireRoles(['admin', 'secretary']);
 
 ?>
 

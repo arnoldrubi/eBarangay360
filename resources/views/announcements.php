@@ -1,6 +1,8 @@
 <?php
   require '../config/database.php';
 
+  require_once '../src/helpers/utilities.php';
+  requireRoles(['admin', 'secretary']);
 ?>
 
 <main class="col-md-10 ms-sm-auto px-md-4 py-4">
@@ -61,7 +63,7 @@
                 <td><?= htmlspecialchars($announcement['post_body']) ?></td>
                 <td><?= ucfirst(htmlspecialchars($announcement['status'])) ?></td>
                 <td><?= htmlspecialchars($announcement['post_date']) ?></td>
-                <td class="text-center"><a data-id="<?= $announcement['id'] ?>" data-bs-toggle="modal" data-bs-target="" href="#" class="btn btn-sm pin-news <?= $announcement['is_pinned']  === 1 ? 'btn-success' : 'btn-warning' ?> text-white edit-announcement-btn" title="Pin Post"><i class="material-symbols-outlined md-18"><?= $announcement['is_pinned']  === 1 ? 'pinboard' : 'keep' ?></i></a></td>
+                <td class="text-center"><a data-id="<?= $announcement['id'] ?>" data-ispinned="<?= $announcement['is_pinned'] ?>" href="#" class="btn btn-sm pin-news <?= $announcement['is_pinned']  === 1 ? 'btn-success' : 'btn-warning' ?> text-white edit-announcement-btn" title="<?= $announcement['is_pinned']  === 1 ? 'Unpin Post' : 'Pin Post' ?>"><i class="material-symbols-outlined md-18"><?= $announcement['is_pinned']  === 1 ? 'pinboard' : 'keep' ?></i></a></td>
                 <td class="text-center">
                   <a data-id="<?= $announcement['id'] ?>" href="?page=edit-announcement&id=<?= $announcement['id'] ?>" class="btn btn-sm btn-warning text-white edit-household-btn" title="Edit"><i class="material-symbols-outlined md-18">edit</i></a>
                   <a data-id="<?= $announcement['id'] ?>" class="delete-news btn btn-sm btn-danger delete-btn"><i class="material-symbols-outlined md-18">delete</i></a>
@@ -233,18 +235,19 @@ document.querySelectorAll(".delete-news").forEach(btn => {
 
 document.querySelectorAll(".pin-news").forEach(btn => {
   btn.addEventListener("click", function () {
-    if (confirm("Are you sure you want to pin this post?")) {
+    if (confirm("Are you sure you want to pin/unpin this post?")) {
       const id = this.getAttribute("data-id");
+      const isPinned = this.getAttribute("data-ispinned") === "1";
 
       fetch("../src/actions/pin-news.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "id=" + id
+        body: "id=" + id + "&is_pinned=" + (isPinned ? 0 : 1)
       })
       .then(res => res.text())
       .then(data => {
         if (data.trim() === "success") {
-          alert("Post deleted successfully.");
+          alert("Post updated successfully.");
           location.reload();
         } else {
           alert("Error: " + data);

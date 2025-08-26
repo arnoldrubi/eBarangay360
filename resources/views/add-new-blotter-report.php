@@ -1,3 +1,7 @@
+<?php
+  require_once '../src/helpers/utilities.php';
+  requireRoles(['admin', 'secretary']);
+?>
 <main class="col-md-10 ms-sm-auto px-md-4 py-4">
 
 <div class="px-3 py-5">

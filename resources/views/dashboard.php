@@ -15,7 +15,9 @@
      <!-- Main Content -->
       <main class="col-md-10 ms-sm-auto px-md-4 py-4">
         <h2>Dashboard</h2>
-
+        <?php
+            if($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'secretary') {
+        ?>
         <div class="row mb-4">
           <div class="col-md-4">
             <div class="card bg-primary card-stats">
@@ -42,6 +44,9 @@
             </div>
           </div>
         </div>
+        <?php
+            }
+        ?>
 
         <div class="card mb-4">
           <div class="card-header">
@@ -80,11 +85,14 @@
                 $announcements = $stmt->fetchAll();
 
                 foreach ($announcements as $announcement): ?>
-                <div class="card-body">
-                  <li><?= htmlspecialchars($announcement['post_title']) ?></li>
-                </div>
+                
+                  <li><a href="?page=view-announcement&id=<?= $announcement['id'] ?>"><?= htmlspecialchars($announcement['post_title']) ?></a></li>
+
             <?php endforeach; ?>
-                <a href="#">Go to News and Announcements</a>
+                
+              </div>
+              <div class="card-footer">
+                <a href="?page=all-announcements">Go to News and Announcements</a>
               </div>
             </div>
           </div>
@@ -95,9 +103,8 @@
                 <h6><i class="material-symbols-outlined md-24 text-secondary">map</i>  Location Map</h6>
               </div>
               <div class="card-body">
-                <div class="bg-light text-center p-5 border rounded">
-                  <p>Map Placeholder</p>
-                  <p class="text-muted">Google Maps integration here</p>
+                <div class="bg-light text-center p-0 border rounded">
+                  <iframe style="width: 509px; height: 553px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15424.332094537385!2d120.8410616996022!3d14.876635270287117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3396538062aa82cd%3A0x1d243f4ee1031180!2sLalangan%2C%20Plaridel%2C%20Bulacan!5e0!3m2!1sen!2sph!4v1756043990035!5m2!1sen!2sph" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
               </div>
             </div>
