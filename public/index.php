@@ -42,6 +42,9 @@ switch ($page) {
     case 'add-resident':
         $view('add-resident', ['title' => 'Add Resident - eBarangay360']);
         break;
+    case 'edit-resident':
+        $view('edit-resident', ['title' => 'Edit Resident - eBarangay360']);
+        break;
     case 'households':
         $view('households', ['title' => 'Households Module - eBarangay360']);
         break;
@@ -59,6 +62,9 @@ switch ($page) {
         break;
     case 'edit-blotter-report':
         $view('edit-blotter-report', ['title' => 'Edit Blotter Report - eBarangay360']);
+        break;
+    case 'view-blotter-report':
+        $view('view-blotter-report', ['title' => 'View Blotter Report - eBarangay360']);
         break;
     case 'barangay-certificates':
         $view('barangay-certificates', ['title' => 'Barangay Certificates - eBarangay360']);

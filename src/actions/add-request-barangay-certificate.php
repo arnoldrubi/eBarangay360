@@ -5,7 +5,7 @@ require_once BASE_PATH . '/src/helpers/utilities.php';
 
 $resident_id = clean($_POST['resident_id']);
 $purpose = clean($_POST['purpose']);
-$status = 'approved';
+$status = 'pending'; // default value is pending
 $requested_at = date('Y-m-d H:i:s');
 
 $required = [
@@ -31,8 +31,8 @@ try {
   //get the latest request
   $latestRequest = $pdo->lastInsertId();
 
-  header("Location: ../../public/index.php?page=barangay-certificates&success=1&request_id=" . $latestRequest);
-  exit;
+    header("Location: ../../public/index.php?page=barangay-certificates&success=1");
+    exit;
 
 } catch (PDOException $e) {
   echo "Error: " . $e->getMessage();

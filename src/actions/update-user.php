@@ -10,7 +10,6 @@ if (!$id) {
 // Collect form data
 $username   = clean($_POST['username'] ?? '');
 $full_name  = clean($_POST['full_name'] ?? '');
-$role      = clean($_POST['role'] ?? '');
 $email      = clean($_POST['email'] ?? '');
 $password   = $_POST['password'] ?? ''; // raw input
 $updated_at = date('Y-m-d H:i:s');
@@ -19,18 +18,12 @@ try {
     // Build base query
     $query = "
         UPDATE users SET
-            username = :username,
             full_name = :full_name,
-            role = :role,
-            email = :email,
             updated_at = :updated_at
     ";
 
     $params = [
-        ':username'   => $username,
         ':full_name'  => $full_name,
-        ':role'      => $role,
-        ':email'      => $email,
         ':updated_at' => $updated_at,
         ':id'         => $id
     ];
@@ -51,7 +44,7 @@ try {
     $_SESSION['user']['full_name'] = $full_name;
     $_SESSION['user']['email']     = $email;
 
-    header("Location: ../../public/index.php?page=profile&success=1");
+    header("Location: ../../public/index.php?page=manage-account&success=1");
     exit;
 
 } catch (PDOException $e) {

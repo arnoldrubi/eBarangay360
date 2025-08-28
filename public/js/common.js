@@ -165,3 +165,4 @@ function printElementById(elementId, title = "Print Preview") {
 //     console.log(`Added official: ${official.first_name} - ${official.position}`);
 //   });
 // });
+

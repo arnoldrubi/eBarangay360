@@ -1,13 +1,19 @@
 <body id="signup-page" style="">
+  <div class="container">
+  <div class="jumbotron">
+    <h1>eBarangay360 Lalangan Sign Up</h1>      
+    <p>Register today and get access to the platform after approval.</p>
+  </div>   
+</div>
   <div id="signup-container" class="d-flex justify-content-center align-items-center">
     <div class="card container rounded-4 shadow">
       <div class="card-body p-0">
         <div class="row">
           <div class="col-md-12 rounded-start row m-0 splash-screen-left">
-            <form method="POST" class="needs-validation" novalidate action="<?= ACTIONS_URL ?>add-resident.php" enctype="multipart/form-data">
+            <form method="POST" class="needs-validation" novalidate action="<?= ACTIONS_URL ?>register-resident.php" enctype="multipart/form-data">
               <!-- Basic Information -->
               <div class="card mb-4">
-                <div class="card-header fw-bold">Basic Information</div>
+                <div class="card-header fw-bold"><i class="add-resident-subheading-icon material-symbols-outlined md-18 text-dark">Info</i> Basic Information</div>
                 <div class="card-body row g-3">
                   <div class="col-md-4"><input type="text" name="first_name" class="form-control" placeholder="First name" required>
                     <div class="invalid-feedback">First Name is required.</div>
@@ -73,7 +79,7 @@
 
               <!-- Present Address -->
               <div class="card mb-4">
-                <div class="card-header fw-bold">Present Address</div>
+                <div class="card-header fw-bold"><i class= "add-resident-subheading-icon material-symbols-outlined md-18 text-dark">add_location</i> Present Address</div>
                 <div class="card-body row g-3">
                   <div class="col-md-4">
                     <label class="form-label">Province</label>
@@ -105,6 +111,7 @@
                   </div>
                   <div class="col-md-3">
                     <input type="text" id="present_zone" name="present_zone" class="form-control" placeholder="Zone (Purok)">
+                    <div class="invalid-feedback">Zone (Purok) is required.</div>
                   </div>
                   <div class="col-md-6">
                     <input type="text" id="present_street" name="present_street" class="form-control" placeholder="Street">
@@ -127,7 +134,7 @@
               <!-- Permanent Address -->
               <div id="permanentAddressBlock">
                   <div class="card mb-4">
-                  <div class="card-header fw-bold">Permanent Address</div>
+                  <div class="card-header fw-bold"><i class="add-resident-subheading-icon material-symbols-outlined md-18 text-dark">add_location_alt</i> Permanent Address</div>
                   <div class="card-body row g-3">
                       <div class="col-md-4">
                         <label class="form-label">Province</label>
@@ -173,7 +180,7 @@
 
               <!-- Other Information -->
               <div class="card mb-4">
-                <div class="card-header fw-bold">Other Information</div>
+                <div class="card-header fw-bold"><i class="add-resident-subheading-icon material-symbols-outlined md-18 text-dark">data_info_alert</i> Other Information</div>
                 <div class="card-body row g-3">
                   <div class="col-md-4">
                     <input type="text" name="occupation" class="form-control" placeholder="Occupation">
@@ -188,12 +195,6 @@
                   </div>
                   <div class="col-md-4"><input type="text" name="alias" class="form-control" placeholder="Alias/Nickname"></div>
 
-                  <div class="col-md-3">
-                    <div class="form-check form-switch">
-                      <input name="status" class="form-check-input" type="checkbox" id="aliveSwitch" checked>
-                      <label class="form-check-label" for="aliveSwitch">Alive</label>
-                    </div>
-                  </div>
                   <div class="col-md-5">
                     <select name="valid_id_type" class="form-select">
                       <option>Select a Valid ID</option>
@@ -237,7 +238,7 @@
 
               <!-- Add Photo -->
               <div class="card mb-4">
-                <div class="card-header fw-bold">Add Photo</div>
+                <div class="card-header fw-bold"><i class="add-resident-subheading-icon material-symbols-outlined md-18 text-dark">camera_video</i> Add Photo</div>
                 <div class="card-body row g-3 align-items-center">
                   <div class="mb-3">
                       <video id="cameraPreview" autoplay playsinline width="300" height="225" class="border rounded d-none"></video>
@@ -249,15 +250,15 @@
                   </div>
 
                   <div class="col-md-6">
-                      <input type="file" name="photo" accept="image/*" class="form-control">
-                      <small class="text-muted">It is recommended when uploading a photo to select one with a 1x1 dimension</small>
+                      <input type="file" name="photo" accept="image/*" class="d-none form-control">
+                      <small class="text-muted d-none">It is recommended when uploading a photo to select one with a 1x1 dimension</small>
                   </div>
                 </div>
               </div>
 
               <div class="d-flex justify-content-end gap-2">
                 <a class="btn btn-secondary" href="index.php">Cancel</a>
-                <button class="btn btn-primary">Save Resident Info</button>
+                <button class="btn btn-primary">Sign Up</button>
               </div>
             </form>
           </div>

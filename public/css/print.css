@@ -2,4 +2,7 @@
   #printable-page {
     display: block;
   }
+  button, .btn{
+    display:none;
+  }
 }

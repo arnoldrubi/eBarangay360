@@ -110,15 +110,15 @@ $stmt->execute([
   ':perm_zone' => $_POST['permanent_zone'],
   ':perm_street' => $_POST['permanent_street'],
   ':perm_landmark' => $_POST['permanent_landmark'],
-  ':alive' => isset($_POST['status']) ? '1' : '0', // Use '1' for Alive, '0' for Deceased
+  ':alive' =>  '1', // Use '1' for Alive, '0' for Deceased
   ':unemployed' => isset($_POST['unemployed']) ? '1' : '0', //
   ':idtype' => clean($_POST['valid_id_type']),
   ':idnum' => clean($_POST['valid_id_number']),
   ':photo' => $photoName,
   ':created_at' => date('Y-m-d H:i:s'),
-  ':registration_source' => 'admin',
-  ':reg_status' => 'approved'
+  ':registration_source' => 'public',
+  ':reg_status' => 'pending'
 ]);
 
-header('Location: ../../public/index.php?page=residents&success=1');
+header('Location: ../../public/index.php?registrationsuccess=1');
 exit;

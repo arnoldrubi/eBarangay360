@@ -135,8 +135,8 @@
               <td><?php echo $row['gender']; ?></td>
               <td><?php echo $current_age; ?></td>
               <td><?php echo $row['alive'] == 1 ? 'Alive': 'Deceased'; ?></td>
-              <td>
-                <a data-id="<?= $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#editResidentModal" href="#" class="btn btn-sm btn-warning text-white edit-btn" title="Edit"><i class="material-symbols-outlined md-18">edit</i></a>
+              <td class="text-center">
+                <a href="?page=edit-resident&resident_id=<?= $row['id'] ?>" class="btn btn-sm btn-warning text-white resident-edit-btn" title="Edit"><i class="material-symbols-outlined md-18">edit</i></a>
                 <a data-id="<?= $row['id'] ?>" class="btn btn-sm btn-danger delete-btn"><i class="material-symbols-outlined md-18">delete</i></a>
               </td>
             </tr>

@@ -1,4 +1,5 @@
 <?php
+  
   require '../config/database.php';
     $request_failed = false;
   if(isset($_GET['request_id']) && $_GET['success'] == 1) {
@@ -33,14 +34,22 @@
         $request_failed = true;
      }  
   }
-  require_once '../src/helpers/utilities.php';
-  requireRoles(['admin', 'secretary']);
+  // get resident ID from users table based on session ID
+  if(isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
+    $user_id = $_SESSION['user_id'];
+    $stmt = $pdo->prepare("SELECT resident_id FROM users WHERE id = :id LIMIT 1");
+    $stmt->execute([':id' => $user_id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($user) {
+        $resident_id = $user['resident_id'];
+    }
+  }
 ?>
 
 <main id="residents-dashboard" class="col-md-10 ms-sm-auto px-md-4 py-4">
   <div class="px-3 py-5">
       <div class="row mb-3">
-          <h1 class="m-0">Barangay Certificates</h1>
+          <h1 class="m-0">Barangay Certificate</h1>
           <hr>
       </div>
       <div class="row mx-0">
@@ -55,6 +64,9 @@
                                       Barangay Certificate
                                   </a>
                               </li>
+                              <?php
+                                if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary') {
+                              ?>
                               <li class="nav-item">
                                   <a href="?page=barangay-clearance" class="nav-link text-white text-truncate <?php if ($page == 'barangay-clearance') echo 'active'; ?>" aria-current="page">
                                       Barangay Clearance
@@ -65,6 +77,7 @@
                                       Barangay Indigency
                                   </a>
                               </li>
+                              <?php } ?>
                           </ul>
                       </nav>
                   </div>
@@ -72,18 +85,24 @@
           </section>
 
           <section class="inner-content col-md-9 p-0 bg-transparent rounded" style="overflow: hidden;">
-            <form method="POST" class="needs-validation" id="barangay-certificate-form" class="px-3 py-4" novalidate action="<?= ACTIONS_URL ?>add-request-barangay-certificate.php" enctype="multipart/form-data">
+            <form method="POST" class="needs-validation" id="barangay-clearance-form" class="px-3 py-4" novalidate action="<?= ACTIONS_URL ?>add-request-barangay-certificate.php" enctype="multipart/form-data">
                 <div class="card mb-4">
                     <div class="card-header fw-bold"><i class="add-resident-subheading-icon material-symbols-outlined md-18 text-dark">Info</i> Process Document Request</div>
                     <div class="card-body row g-3">
                         <div class="col-md-8"><input type="text" name="purpose" class="form-control" placeholder="Purpose" required>
                             <div class="invalid-feedback">Purpose is required.</div>
                         </div>
+                        <input type="number" class="d-none" id="resident-id" name="resident_id" value="<?= $resident_id ?? 0 ?>">
+                        <?php
+                            if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary') {
+                        ?>
                         <div class="col-md-4 d-flex justify-content-end g-3 mb-3 align-items-end">
-                            <input type="number" class="d-none" id="resident-id" name="resident_id" value="0">
                             <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"  data-bs-target="#resident-search-modal">
                             <i class="material-symbols-outlined md-18 text-secondary">person_search</i> Search resident data </button>
                         </div>
+                        <?php
+                            }
+                        ?>
                     </div>
                     <div class="card-body row g-3">
                         <div class="col-md-8">
@@ -91,6 +110,9 @@
                         </div>
                     </div>
                 </div>
+                 <?php
+                  if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary') {
+                 ?>
                 <div class="card mb-4">
                     <div class="card-header fw-bold"><i class="add-resident-subheading-icon material-symbols-outlined md-18 text-dark">Info</i> Requester Information</div>
                     <div class="card-body row g-3">
@@ -101,6 +123,7 @@
                         </div>
                     </div>
                 </div>
+                <?php } ?>
             </form>
               <!-- Table -->
             <div class="table-responsive">
@@ -111,8 +134,8 @@
                     <th>Requester</th>
                     <th>Zone / Street</th>
                     <th>Purpose</th>
-                    <th>Status</th>
                     <th>Date Requested</th>
+                    <th>View Document</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -120,9 +143,18 @@
                 
                 <?php
 
+                    if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary') {
+
                     $stmt = $pdo->query("SELECT r.last_name,r.first_name, r.middle_name, r.date_of_birth, r.gender, r.civil_status, r.present_zone, r.present_street, bcr.id, bcr.purpose, bcr.status, bcr.requested_at
                         FROM residents r
                         JOIN barangay_certificate_requests bcr ON r.id = bcr.resident_id");
+                    }
+                    else{
+
+                    $stmt = $pdo->query("SELECT r.last_name,r.first_name, r.middle_name, r.date_of_birth, r.gender, r.civil_status, r.present_zone, r.present_street, bcr.id, bcr.purpose, bcr.status, bcr.requested_at
+                        FROM residents r
+                        JOIN barangay_certificate_requests bcr ON r.id = bcr.resident_id WHERE r.id = $resident_id");
+                    }
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $current_age = date_diff(date_create($row['date_of_birth']), date_create('today'))->y;
                     ?>
@@ -131,10 +163,16 @@
                     <td><?php echo $row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name']; ?></td>
                     <td><?php echo $row['present_zone']. ' ' . $row['present_street']; ?></td>
                     <td><?php echo $row['purpose']; ?></td>
-                    <td><?php echo $row['status']; ?></td>
                     <td><?php echo $row['requested_at']; ?></td>
                     <td class="text-center">
-                        <a data-id="<?= $row['id'] ?>" href="?page=barangay-certificates&success=1&request_id=<?= $row['id'] ?>" class="btn btn-sm btn-success text-white edit-btn" title="View Barangay Certificate"><i class="material-symbols-outlined md-18">article</i></a>
+                        <a <?= $row['status'] === 'pending' ? 'tabindex="-1" ' : '' ?> data-id="<?= $row['id'] ?>" href="?page=barangay-certificates&success=1&request_id=<?= $row['id'] ?>" class="btn btn-sm btn-success text-white <?= $row['status'] === 'pending' ? 'disabled ' : '' ?>" title="View Barangay Certificate"><i class="material-symbols-outlined md-18">article</i></a>
+                    </td>
+                    <td>
+                        <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary') { ?>
+                        <a data-id="<?= $row['id'] ?>" data-cert-type="barangay-certificate" data-request-status="<?= $row['status'] ?>" href="#" class="btn btn-sm <?= $row['status'] === 'approved' ? 'btn-primary' : 'btn-warning' ?> text-white approve-certificate-btn" title="<?= ucfirst($row['status']) ?>"><i class="material-symbols-outlined md-18">order_approve</i></a>
+                        <?php } ?>
+                        <a data-id="<?= $row['id'] ?>" data-cert-type="barangay-certificate" class="btn btn-sm btn-danger cert-delete-btn"><i class="material-symbols-outlined md-18">delete</i></a>
+
                     </td>
                     </tr>
                     <?php } ?>
@@ -172,6 +210,7 @@
                         </div>
                     <div class="col-9">
                         <div class="text-center">
+                            <b>REPUBLIC OF THE PHILIPPINES</b><br>
                             <b>Province of Bulacan</b><br>
                             <b>Municipality of Plaridel</b><br>
                             <b>Barangay Lalangan</b><br>
@@ -183,18 +222,15 @@
                             <span class="text-uppercase" id="certificate-resident-province">Bulacan</span>.
                         </p>
                         <p class="mt-2 mb-0" style="text-indent: 50px; text-align: justify;">
-                           <?= $name_pronoun ?> is a law abiding citizen and has a good moral character. Records of this barangay has shown that he/she has not committed nor been involved in any kind of unlawful activities in this barangay. 
+                           <?= $name_pronoun ?>  has no derogatory record filed in our Barangay Office.  The above-named individual who is a bonafide resident of this barangay is a person of good moral character, peace-loving and civic minded citizen. 
                         </p>
+                        <p>
                         <br>
                         <span class="mt-2 mb-0" style="text-align: justify;">
-                            <span style="margin-left: 50px;"></span> This certificate is hereby issued upon request for 
+                            <span style="margin-left: 50px;"></span>  This certification/clearance is hereby issued in connection with the subject’s application for <u id="certificate_purpose_placeholder" class="text-danger text-nowrap"><?= $requester_purpose ?></u> and for whatever legal purpose it may serve her/his best, and is valid for six (6) months from the date issued. 
                         </span>
-
-                        <div id="certificate_purpose" class="position-relative d-inline-block pointer text-justified" data-permit-requestor="">
-                            <u id="certificate_purpose_reason" class="text-uppercase"></u>
-                            <u id="certificate_purpose_placeholder" class="text-danger text-nowrap"><?= $requester_purpose ?></u>
-                        
-                        </div>. 
+                        </p>
+ 
 
                         <p class="mt-4" style="text-indent: 50px; text-align: justify;">
                             Issued this <u><?= date("d")?><span class="small"><?php switch (intval(date("d")) % 10 && date("d")[0]!=1) {
@@ -212,11 +248,13 @@
                         <div class="float-end pt-5">
                             <div class="d-flex flex-column align-items-center py-5">
                                 <div class="border-bottom border-dark border-1" style="color: transparent;"> _________________________</div>
-                                <div class="text-center punong-barangay-placeholder"></div>
+                                <div class="text-center punong-barangay-placeholder">Mr. Danilo Tayao</div>
                                 <div>Punong Barangay</div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
             <div class="modal-footer d-flex">
                 <button type="button" class="btn btn-primary flex-grow-1" id="barangay-certificate-export">Export</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -253,8 +291,23 @@
         <h5 class="modal-title text-light" id="submissionModalLabel">Error!</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div id="message" class="modal-body">
+      <div id="error-message" class="modal-body">
         No Data Found
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="successModalLabel">Success!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="success-message" class="modal-body">
+        User Account Updated Successfully.
       </div>
     </div>
   </div>
@@ -297,3 +350,21 @@
     <?php
     }
 ?>
+
+<?php if (isset($_GET['success'])): ?>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const messageDiv = document.getElementById('success-message');
+
+    // 2. Set the content (you can use Bootstrap alert styles if you like)
+    messageDiv.innerHTML = `
+      <div class="alert alert-success" role="alert">
+       Request has been submitted successfully!
+      </div>`;
+
+    const modal = new bootstrap.Modal(document.getElementById('successModal'));
+    modal.show();
+  });
+</script>
+<?php endif; ?>

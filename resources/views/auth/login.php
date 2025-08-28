@@ -157,6 +157,21 @@
   </div>
 </div>
 
+  <!-- Success Modal -->
+<div class="modal fade" id="submissionModal" tabindex="-1" aria-labelledby="submissionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title text-light" id="submissionModalLabel">Success!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="message" class="modal-body">
+        The resident has been added successfully.
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <script>
     function checkboxTrue() {
@@ -173,3 +188,22 @@
   }
 } 
   </script>
+
+  <!-- Show success modal if registration was successful -->
+<?php if (isset($_GET['registrationsuccess'])): ?>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const messageDiv = document.getElementById('message');
+
+    // 2. Set the content (you can use Bootstrap alert styles if you like)
+    messageDiv.innerHTML = `
+      <div class="alert alert-success" role="alert">
+        Your registration is under review.
+      </div>`;
+
+    const modal = new bootstrap.Modal(document.getElementById('submissionModal'));
+    modal.show();
+  });
+</script>
+<?php endif; ?>

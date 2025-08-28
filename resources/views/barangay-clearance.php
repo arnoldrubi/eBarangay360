@@ -55,6 +55,9 @@
                                       Barangay Certificate
                                   </a>
                               </li>
+                              <?php
+                                if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary') {
+                              ?>
                               <li class="nav-item">
                                   <a href="?page=barangay-clearance" class="nav-link text-white text-truncate <?php if ($page == 'barangay-clearance') echo 'active'; ?>" aria-current="page">
                                       Barangay Clearance
@@ -65,6 +68,7 @@
                                       Barangay Indigency
                                   </a>
                               </li>
+                              <?php } ?>
                           </ul>
                       </nav>
                   </div>
@@ -111,8 +115,8 @@
                     <th>Requester</th>
                     <th>Zone / Street</th>
                     <th>Purpose</th>
-                    <th>Status</th>
                     <th>Date Requested</th>
+                    <th>View Document</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -131,10 +135,14 @@
                     <td><?php echo $row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name']; ?></td>
                     <td><?php echo $row['present_zone']. ' ' . $row['present_street']; ?></td>
                     <td><?php echo $row['purpose']; ?></td>
-                    <td><?php echo $row['status']; ?></td>
                     <td><?php echo $row['requested_at']; ?></td>
                     <td class="text-center">
-                        <a data-id="<?= $row['id'] ?>" href="?page=barangay-clearance&success=1&request_id=<?= $row['id'] ?>" class="btn btn-sm btn-success text-white edit-btn" title="View Barangay Certificate"><i class="material-symbols-outlined md-18">article</i></a>
+                        <a <?= $row['status'] === 'pending' ? 'tabindex="-1" ' : '' ?> data-id="<?= $row['id'] ?>" href="?page=barangay-clearance&success=1&request_id=<?= $row['id'] ?>" class="btn btn-sm btn-success text-white <?= $row['status'] === 'pending' ? 'disabled ' : '' ?>" title="View Barangay Clearance"><i class="material-symbols-outlined md-18">article</i></a>
+                    </td>
+                    <td>
+                        <a data-id="<?= $row['id'] ?>" data-cert-type="barangay-clearance" data-request-status="<?= $row['status'] ?>" href="#" class="btn btn-sm <?= $row['status'] === 'approved' ? 'btn-primary' : 'btn-warning' ?> text-white approve-certificate-btn" title="<?= ucfirst($row['status']) ?>"><i class="material-symbols-outlined md-18">order_approve</i></a>
+                        <a data-id="<?= $row['id'] ?>" data-cert-type="barangay-clearance" class="btn btn-sm btn-danger cert-delete-btn"><i class="material-symbols-outlined md-18">delete</i></a>
+
                     </td>
                     </tr>
                     <?php } ?>

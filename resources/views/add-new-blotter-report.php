@@ -311,10 +311,7 @@
                   <option value="Maintenance Issues">Maintenance Issues</option>
                   <option value="Others">Others</option>
                 </select>
-                <input class="d-none" type="hidden" id="incident-type" name="incident_type" value="">
-                <div class="position-absolute top-0 start-0" style="width: calc(100% - 40px); display: none;" id="others-incident-type-container">
-                  <input type="text" class="form-control rounded-end-0 border-end-0" placeholder="Others" id="others-incident-type" value="">
-                </div>
+                <input class="mt-2 form-control d-none" id="others-incident-type" name="others_incident_type" placeholder="Indicate the incident type" value="">
               </div>
             </div>
           </div>
@@ -407,7 +404,7 @@
           </div>
         </div>
         <div class="d-flex justify-content-between border-top p-2">
-          <a href="#" class="btn btn-secondary px-3" id="tab-back"><i class="material-symbols-outlined md-18 text-secondary">arrow_circle_up</i> Back to Top</a>
+          <a href="?page=blotter-reports" class="btn btn-secondary px-3">Cancel</a>
           <button type="submit" class="btn btn-primary px-5" id="tab-submit">Submit</button>
         </div>
       </form>
@@ -454,4 +451,3 @@
     </div>
   </div>
 </div>
-

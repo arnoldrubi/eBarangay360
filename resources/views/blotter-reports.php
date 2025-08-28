@@ -116,8 +116,7 @@
             <div class="gap-2 col-12 mb-3 text-end">
               <a href="?page=add-new-blotter-report" class="btn btn-primary fw-semibold btn-with-icon">
                 <i class="material-symbols-outlined md-24 text-light">note_add</i>File New Blotter / Report </a>
-              <button type="button" class="btn btn-success btn-with-icon fw-semibold" id="export-blotter-data">
-                <i class="material-symbols-outlined md-24 text-light">file_download</i>Export Data to CSV </button>
+                <a href="<?= ACTIONS_URL ?>export-blotter-incidents.php" class="btn btn-success dashboard-btn-function"><i class="material-symbols-outlined md-24 text-light">file_download</i>Export Blotter Data</a>
             </div>
           </div>
           <div class="row">
@@ -241,6 +240,7 @@
                               </td>
                               <td class="text-center">
                                 <div class="d-flex gap-2">
+                                  <a data-id="<?= $row['id'] ?>" href="?page=view-blotter-report&blotter_id=<?= $row['id'] ?>" class="btn btn-sm btn-primary text-white edit-btn" title="View"><i class="material-symbols-outlined md-18">visibility</i></a>
                                   <a data-id="<?= $row['id'] ?>" href="?page=edit-blotter-report&blotter_id=<?= $row['id'] ?>" class="btn btn-sm btn-warning text-white edit-btn" title="Edit"><i class="material-symbols-outlined md-18">edit</i></a>
                                   <a data-id="<?= $row['id'] ?>" class="btn btn-sm btn-danger blotter-delete-btn"><i class="material-symbols-outlined md-18">delete</i></a>
                                 </div>

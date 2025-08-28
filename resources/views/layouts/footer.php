@@ -13,9 +13,9 @@
 
   <!-- Custom Scripts based on routes -->
   <script src="<?= BASE_URL ?>/js/common.js"></script>
-  <?php if ($page === 'residents' || $page === 'add-resident') : ?>
+  <?php if ($page === 'residents' || $page === 'add-resident' || $page === 'edit-resident' || $page === 'residents-registration') : ?>
   <script src="<?= BASE_URL ?>/js/residents.js"></script>
-  <?php elseif ($page === 'add-new-blotter-report' || $page === 'blotter-reports' || $page === 'edit-blotter-report') : ?>
+  <?php elseif ($page === 'add-new-blotter-report' || $page === 'blotter-reports' || $page === 'edit-blotter-report' || $page === 'view-blotter-report') : ?>
     <script src="<?= BASE_URL ?>js/blotter-reports.js"></script>
     <script>
       
@@ -133,6 +133,47 @@
     </script>
   <?php endif; ?>
 
+  <?php if ($page === 'edit-resident' && isset($resident)) : ?>
+    <script>
+
+      $(document).ready(function () {
+        const residentId = <?= json_encode($resident['id']) ?>;
+        // Fetch data via AJAX
+        $.get('../public/api/get-resident.php', { id: residentId }, function (data) {
+          const res = JSON.parse(data);
+
+
+          const sameAsPresent = document.getElementById('sameAsPresent');
+          const permanentBlock = document.getElementById('permanentAddressBlock');
+
+          const birthProvince = document.getElementById('edit_birth_province');
+          const birthCity = document.getElementById('edit_birth_city');
+          const birthBarangay = document.getElementById('edit_birth_barangay');
+
+          const presentProvince = document.getElementById('edit_present_province');
+          const presentCity = document.getElementById('edit_present_city');
+          const presentBarangay = document.getElementById('edit_present_barangay');
+
+          const permanentProvince = document.getElementById('edit_permanent_province');
+          const permanentCity = document.getElementById('edit_permanent_city');
+          const permanentBarangay = document.getElementById('edit_permanent_barangay');
+
+          const presentStreet = document.getElementById('edit_present_street');
+          const presentZone = document.getElementById('edit_present_zone');
+          const presentLandmark = document.getElementById('edit_present_landmark');
+
+          const permanentStreet = document.getElementById('edit_permanent_street');
+          const permanentZone = document.getElementById('edit_permanent_zone');
+          const permanentLandmark = document.getElementById('edit_permanent_landmark');
+         
+          // // for populating address chains
+          setupForEditAddressChain(res.place_of_birth_province, res.place_of_birth_city_municipality, res.place_of_birth_barangay, birthProvince, birthCity, birthBarangay);
+          setupForEditAddressChain(res.present_province, res.present_city_municipality, res.present_barangay, presentProvince, presentCity, presentBarangay);
+          setupForEditAddressChain(res.permanent_province, res.permanent_city_municipality, res.permanent_barangay, permanentProvince, permanentCity, permanentBarangay);
+        });
+      });
+    </script>
+  <?php endif; ?>
   
 
 <script>
@@ -267,6 +308,8 @@
         return;
       }
 
+      console.log('Triggered!')
+
       fetch(`api/search-residents.php?term=${encodeURIComponent(query)}`)
         .then(res => res.json())
         .then(data => {
@@ -312,6 +355,8 @@
           });
         });
     });
+
+
 
   </script>
 
@@ -389,6 +434,65 @@
   </script>
 <?php } ?>
 
+<?php
+  if ($page === 'barangay-certificates' || $page === 'barangay-clearance' || $page === 'barangay-certificate-of-indigency') {
+    ?>
+  <script>
+  $('.cert-delete-btn').on('click', function (e) {
+      e.preventDefault();
+
+      const cert_id = $(this).data('id');
+      const cert_type = $(this).data('cert-type');
+      if (!confirm('Are you sure you want to delete this certificate request?')) return;
+
+      $.post('../src/actions/delete-cert-request.php', { id: cert_id, cert_type: cert_type }, function (response) {
+      if (response === 'success') {
+        alert('Certificate request deleted.');
+        location.reload(); // Or remove row via JS
+      } else {
+        alert('Failed to delete certificate request: ' + response);
+      }
+    });
+  });
+
+  document.querySelectorAll(".approve-certificate-btn").forEach(btn => {
+  btn.addEventListener("click", function () {
+    if (confirm("Are you sure you want to update the approval status of this request?")) {
+      const id = this.getAttribute("data-id");
+      const cert_type = this.getAttribute("data-cert-type");
+      const isApproved = this.getAttribute("data-request-status");
+
+      fetch("../src/actions/approve-cert-request.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "id=" + id + "&is_approved=" + isApproved + "&cert_type=" + cert_type
+      })
+      .then(res => res.text())
+      .then(data => {
+        if (data.trim() === "success") {
+          alert("Request updated successfully.");
+          location.reload();
+        } else {
+          alert("Error: " + data);
+        }
+      });
+    }
+  });
+});
+
+  </script>
+<?php } ?>
+
+<script>
+    const toggleBtn = document.getElementById('toggle-btn');
+  const sidebar = document.getElementById('sidebar');
+  const content = document.getElementById('content');
+
+  toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    content.classList.toggle('expanded');
+  });
+</script>
 </body>
 </html>
 

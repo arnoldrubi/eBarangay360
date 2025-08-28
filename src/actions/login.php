@@ -16,6 +16,7 @@ if ($user && password_verify($_POST['password'], $user['password'])) {
     $_SESSION['username'] = $user['username'];
     $_SESSION['role'] = $user['role'];
     $_SESSION['full_name'] = $user['full_name'];
+    $_SESSION['resident_id'] = $user['resident_id'] ?? null; // in case resident_id is not set  
     header("Location: ../../public/index.php?page=dashboard");
     exit;
 }

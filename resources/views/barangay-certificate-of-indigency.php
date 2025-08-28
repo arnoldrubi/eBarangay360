@@ -57,6 +57,9 @@
                                       Barangay Certificate
                                   </a>
                               </li>
+                              <?php
+                                if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary') {
+                              ?>
                               <li class="nav-item">
                                   <a href="?page=barangay-clearance" class="nav-link text-white text-truncate <?php if ($page == 'barangay-clearance') echo 'active'; ?>" aria-current="page">
                                       Barangay Clearance
@@ -67,6 +70,7 @@
                                       Barangay Indigency
                                   </a>
                               </li>
+                              <?php } ?>
                           </ul>
                       </nav>
                   </div>
@@ -81,11 +85,15 @@
                         <div class="col-md-8"><input type="text" name="purpose" class="form-control" placeholder="Purpose" required>
                             <div class="invalid-feedback">Purpose is required.</div>
                         </div>
+                        <?php
+                            if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary') {
+                        ?>
                         <div class="col-md-4 d-flex justify-content-end g-3 mb-3 align-items-end">
                             <input type="number" class="d-none" id="resident-id" name="resident_id" value="0">
                             <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"  data-bs-target="#resident-search-modal">
                             <i class="material-symbols-outlined md-18 text-secondary">person_search</i> Search resident data </button>
                         </div>
+                        <?php } ?>
                     </div>
                     <div class="card-body row g-3">
                         <div class="col-md-8">
@@ -113,8 +121,8 @@
                     <th>Requester</th>
                     <th>Zone / Street</th>
                     <th>Purpose</th>
-                    <th>Status</th>
                     <th>Date Requested</th>
+                    <th>View Document</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -133,10 +141,14 @@
                     <td><?php echo $row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name']; ?></td>
                     <td><?php echo $row['present_zone']. ' ' . $row['present_street']; ?></td>
                     <td><?php echo $row['purpose']; ?></td>
-                    <td><?php echo $row['status']; ?></td>
                     <td><?php echo $row['requested_at']; ?></td>
                     <td class="text-center">
-                        <a data-id="<?= $row['id'] ?>" href="?page=barangay-certificate-of-indigency&success=1&request_id=<?= $row['id'] ?>" class="btn btn-sm btn-success text-white edit-btn" title="View Barangay Certificate"><i class="material-symbols-outlined md-18">article</i></a>
+                        <a <?= $row['status'] === 'pending' ? 'tabindex="-1" ' : '' ?> data-id="<?= $row['id'] ?>" href="?page=barangay-clearance&success=1&request_id=<?= $row['id'] ?>" class="btn btn-sm btn-success text-white <?= $row['status'] === 'pending' ? 'disabled ' : '' ?>" title="View Barangay Clearance"><i class="material-symbols-outlined md-18">article</i></a>
+                    </td>
+                    <td>
+                        <a data-id="<?= $row['id'] ?>" data-cert-type="barangay-certificate-of-indigency" data-request-status="<?= $row['status'] ?>" href="#" class="btn btn-sm <?= $row['status'] === 'approved' ? 'btn-primary' : 'btn-warning' ?> text-white approve-certificate-btn" title="<?= ucfirst($row['status']) ?>"><i class="material-symbols-outlined md-18">order_approve</i></a>
+                        <a data-id="<?= $row['id'] ?>" data-cert-type="barangay-certificate-of-indigency" class="btn btn-sm btn-danger cert-delete-btn"><i class="material-symbols-outlined md-18">delete</i></a>
+
                     </td>
                     </tr>
                     <?php } ?>
@@ -223,7 +235,7 @@
     </div>
 </div>
 
-<!-- Search Resident Modal Complainant -->
+<!-- Search Resident Modal -->
 
 <div class="modal fade" id="resident-search-modal" tabindex="-1" aria-labelledby="submissionModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">

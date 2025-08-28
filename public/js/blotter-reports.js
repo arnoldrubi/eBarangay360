@@ -89,3 +89,19 @@ $(document).ready(function() {
   });
 });
 
+  // check if ID exist first
+
+
+  const typeDropdown = document.querySelector('#type-of-incident');
+  const otherIncidentInput = document.querySelector('#others-incident-type');
+  if(typeDropdown){
+    typeDropdown.addEventListener('change', function() {
+      const selectedType = this.value;
+      if (selectedType == 'Others') {
+        otherIncidentInput.classList.remove('d-none');
+        otherIncidentInput.focus();
+      } else {
+        otherIncidentInput.classList.add('d-none');
+      }
+    });
+  }

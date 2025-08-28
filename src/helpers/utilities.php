@@ -43,27 +43,31 @@ function requireRoles(array $roles) {
     }
 }
 
-// function sendMail($to, $subject, $message, $from = "no-reply@yourdomain.com") {
-//     // Basic headers
-//     $headers  = "MIME-Version: 1.0" . "\r\n";
-//     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-//     $headers .= "From: eBarangay360 <{$from}>" . "\r\n";
+function sendMail($to, $subject, $message, $from = "no-reply@yourdomain.com") {
+    // Basic headers
+    $headers  = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    $headers .= "From: eBarangay360 <{$from}>" . "\r\n";
 
-//     // Send email
-//     return mail($to, $subject, $message, $headers);
-// }
+    // Send email
+    return mail($to, $subject, $message, $headers);
+}
 
-// // copy to new user registration
-// $subject = "Your eBarangay360 Account";
-// $message = "
-//     <h3>Welcome to eBarangay360</h3>
-//     <p>Hello {$new_user['full_name']},</p>
-//     <p>An account has been created for you.</p>
-//     <p><b>Username:</b> {$new_user['username']}<br>
-//        <b>Password:</b> {$plain_password} (please change it after login)</p>
-//     <p>You can login here: <a href='https://yourdomain.com/login.php'>Login</a></p>
-//     <br>
-//     <p>– eBarangay360 Team</p>
-// ";
+// utility functions for returning province, city and barangay name
+function returnBarangayName($barangayId, PDO $pdo) {
+    $stmt = $pdo->prepare("SELECT name FROM barangays WHERE barangay_id = :id");
+    $stmt->execute(['id' => $barangayId]);
+    return $stmt->fetchColumn();
+}
 
-// sendMail($new_user['email'], $subject, $message);
+function returnCityName($cityId, PDO $pdo) {
+    $stmt = $pdo->prepare("SELECT name FROM city_municipality WHERE city_municipal_id = :id");
+    $stmt->execute(['id' => $cityId]);
+    return $stmt->fetchColumn();
+}
+
+function returnProvinceName($provinceId, PDO $pdo) {
+    $stmt = $pdo->prepare("SELECT name FROM provinces WHERE province_id = :id");
+    $stmt->execute(['id' => $provinceId]);
+    return $stmt->fetchColumn();
+}

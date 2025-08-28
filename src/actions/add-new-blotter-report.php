@@ -165,7 +165,7 @@ try {
 
         ':involved_parties' => clean($_POST['involved_parties']),
 
-        ':incident_type' => clean($_POST['type_of_incident']),
+        ':incident_type' => $_POST['type_of_incident'] === 'Others' ? clean($_POST['others_incident_type']) : clean($_POST['type_of_incident']),
         ':date_of_incident' => $_POST['date_of_incident'],
         ':time_of_incident' => $_POST['time_of_incident'],
         ':incident_location' => clean($_POST['incident_location']),

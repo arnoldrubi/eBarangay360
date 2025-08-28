@@ -130,7 +130,21 @@ function startCamera(video, canvas, captureBtn, context) {
   });
 });
 
+  $('.reject-btn').on('click', function (e) {
+    e.preventDefault();
 
+    const id = $(this).data('id');
+    if (!confirm('Are you sure you want to reject this registration?')) return;
+
+    $.post('../src/actions/reject-resident-signup.php', { id: id }, function (response) {
+      if (response === 'success') {
+        alert('Registration deleted.');
+        location.reload(); // Or remove row via JS
+      } else {
+        alert('Failed to delete registration: ' + response);
+      }
+    });
+  });
 document.addEventListener('DOMContentLoaded', function () {
 
   // Call the function for both address chains
@@ -218,6 +232,76 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+// handle approval of registration
+
+document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('registration-status-update')) {
+    const button = e.target;
+    const newStatus = button.getAttribute('data-status');
+    const dropdown = button.closest('.dropdown-menu');
+    const residentID = button.closest('.dropdown-menu').getAttribute('data-id');
+    const toggleButton = dropdown.previousElementSibling;
+
+    console.log('Updating status for resident ID:', residentID, 'to status:', newStatus);
+    console.log('UPDATE residents SET status = ' + newStatus + ' WHERE id =' + residentID);
+
+    // Optional: Update the dropdown label immediately
+    toggleButton.textContent = button.textContent;
+
+    // Send the update to the server
+    fetch('api/update-registration-status.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        residentID: residentID,
+        status: newStatus
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Status updated successfully!');
+        // Optionally, you can refresh the page or update the UI further
+        location.reload();
+      } else {
+        alert('Failed to update status.');
+        console.log(data);
+      }
+    })
+    .catch(err => {
+      console.error('Request failed', err);
+      alert('Error updating status.');
+    });
+  }
+});
+
+document.querySelectorAll(".edit-approval-btn").forEach(btn => {
+  btn.addEventListener("click", function () {
+    if (confirm("Are you sure you want to approve this registration?")) {
+      const id = this.getAttribute("data-id");
+      const regStatus = this.getAttribute("data-regstatus");
+
+      fetch("../src/actions/approve-resident-registration.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "id=" + id + "&reg_status=" + (regStatus)
+      })
+      .then(res => res.text())
+      .then(data => {
+        if (data.trim() === "success") {
+          alert("Registration approved successfully. Data has been moved to residents list." + regStatus);
+          location.reload();
+        } else {
+          alert("Error: " + data);
+        }
+      });
+    }
+  });
+});
+
+
 // Handle resident edit and delete functionality
 $(document).ready(function () {
 
@@ -225,41 +309,35 @@ $(document).ready(function () {
       $('#residents-table').DataTable();
         const table = $('#residents-table').DataTable();
         // Gender Filter
-      // $('#genderFilter').on('change', function () {
-      //   const gender = this.value;
-      //   table.column(6).search(gender).draw(); // Gender column index
-      // });
+      $('#gender-filter').on('change', function () {
+        const gender = this.value;
+        table.column(6).search(gender).draw(); // Gender column index
+      });
 
-      // // Status Filter
-      // $('#statusFilter').on('change', function () {
-      //   const status = this.value;
-      //   table.column(8).search(status).draw(); // Status column index (adjust as needed)
-      // });
+      // Age Group Filter (custom range logic)
+      $('#age-filter').on('change', function () {
+        const selected = this.value;
 
-      // // Age Group Filter (custom range logic)
-      // $('#ageFilter').on('change', function () {
-      //   const selected = this.value;
+        $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(f => f.name !== 'ageGroupFilter');
 
-      //   $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(f => f.name !== 'ageGroupFilter');
+        if (selected) {
+          $.fn.dataTable.ext.search.push(function ageGroupFilter(settings, data, dataIndex) {
+            const age = parseInt(data[7]); // Age column index
 
-      //   if (selected) {
-      //     $.fn.dataTable.ext.search.push(function ageGroupFilter(settings, data, dataIndex) {
-      //       const age = parseInt(data[7]); // Age column index
+            if (
+              (selected === 'Minor' && age <= 17) ||
+              (selected === '19 above and below 60' && age >= 18 && age <= 59) ||
+              (selected === 'Senior' && age >= 60)
+            ) {
+              return true;
+            }
 
-      //       if (
-      //         (selected === 'child' && age <= 17) ||
-      //         (selected === 'adult' && age >= 18 && age <= 59) ||
-      //         (selected === 'senior' && age >= 60)
-      //       ) {
-      //         return true;
-      //       }
+            return false;
+          });
+        }
 
-      //       return false;
-      //     });
-      //   }
-
-      //   table.draw();
-      // });
+        table.draw();
+      });
   // end data table
   // set to operate camera
   const video = document.getElementById('cameraPreview');
@@ -353,3 +431,23 @@ $(document).ready(function () {
 
  });// End of document ready
 
+
+   // Calculate age based on date of birth
+  const birthdateInput = document.getElementById('birthdate');
+  const ageInput = document.getElementById('age');
+
+  birthdateInput.addEventListener('change', function () {
+    const dob = new Date(this.value);
+    const today = new Date();
+
+    let age = today.getFullYear() - dob.getFullYear();
+    const hasHadBirthdayThisYear =
+      today.getMonth() > dob.getMonth() ||
+      (today.getMonth() === dob.getMonth() && today.getDate() >= dob.getDate());
+
+    if (!hasHadBirthdayThisYear) {
+      age -= 1;
+    }
+
+    ageInput.value = age >= 0 ? age : '';
+  });

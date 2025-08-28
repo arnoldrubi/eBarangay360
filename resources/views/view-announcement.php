@@ -44,7 +44,7 @@
         </div>
     
         <div class="text-end">
-            <a href="?page=announcements" class="btn btn-secondary"><i class="material-symbols-outlined md-18 text-secondary">arrow_back</i>Back to Announcements List</a>
+            <a href="?page=all-announcements" class="btn btn-secondary"><i class="material-symbols-outlined md-18 text-secondary">arrow_back</i>Back to Announcements List</a>
         </div>
     </div>
   </section>

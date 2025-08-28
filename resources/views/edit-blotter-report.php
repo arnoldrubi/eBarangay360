@@ -339,11 +339,9 @@
                   <option value="Disputes" <?= $incident_type  === 'Disputes' ? 'selected' : '' ?>>Disputes</option>
                   <option value="Public Disturbances" <?= $incident_type  === 'Public Disturbances' ? 'selected' : '' ?>>Public Disturbances</option>
                   <option value="Maintenance Issues" <?= $incident_type  === 'Maintenance Issues' ? 'selected' : '' ?>>Maintenance Issues</option>
-                  <option value="Others" <?= $incident_type  === 'Others' ? 'selected' : '' ?>>Others</option>
+                  <option value="Others" <?= $incident_type  !== 'Crime' && $incident_type  !== 'Noise' && $incident_type  !== 'Disputes' && $incident_type  !== 'Public Disturbances' && $incident_type  !== 'Maintenance Issues' ? 'selected' : '' ?>>Others</option>
                 </select>
-                <div class="position-absolute top-0 start-0" style="width: calc(100% - 40px); display: none;" id="others-incident-type-container">
-                  <input type="text" class="form-control rounded-end-0 border-end-0" placeholder="Others" id="others-incident-type" value="">
-                </div>
+                <input class="mt-2 form-control <?= $incident_type  !== 'Crime' && $incident_type  !== 'Noise' && $incident_type  !== 'Disputes' && $incident_type  !== 'Public Disturbances' && $incident_type  !== 'Maintenance Issues' ? '' : 'd-none' ?>" id="others-incident-type" value="<?= $incident_type; ?>" name="others_incident_type" placeholder="Indicate the incident type" value="">
               </div>
             </div>
           </div>
@@ -445,7 +443,7 @@
           </div>
         </div>
         <div class="d-flex justify-content-between border-top p-2">
-          <a href="#" class="btn btn-secondary px-3" id="tab-back"><i class="material-symbols-outlined md-18 text-secondary">arrow_circle_up</i> Back to Top</a>
+          <a href="?page=blotter-reports" class="btn btn-secondary px-3">Cancel</a>
           <button type="submit" class="btn btn-primary px-5" id="tab-submit">Submit</button>
         </div>
       </form>

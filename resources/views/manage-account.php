@@ -37,7 +37,7 @@
                       <nav class="nav flex-column nav-pills py-3">
                           <p class="text-uppercase text-truncate ps-3">Current Role: <?= ucfirst($role) ?? 'User' ?></p>
                           <hr class="bg-white">
-                          <p class="text-truncate ps-3"><?= $role === 'admin' ? 'Full control over all modules' : ($role === 'secretary' ? 'Can manage all module except for users and site settings' : 'Regular users can access limited features.') ?></p>
+                          <p class="p-3"><?= $role === 'admin' ? 'Full control over all modules' : ($role === 'secretary' ? 'Can manage all module except for users and site settings' : 'Regular users can access limited features.') ?></p>
                       </nav>
                   </div>
               </div>
@@ -62,16 +62,11 @@
                     <div class="card-body row g-3">
                         <div class="col-md-5">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" id="email" value="<?= $email ?? '' ?>" name="email" class="form-control" placeholder="Email" required>
+                            <input type="email" readonly id="email" value="<?= $email ?? '' ?>" name="email" class="form-control" placeholder="Email" required>
                         </div>
                         <div class="col-md-5">
                             <label for="role" class="form-label">Role</label>
-                            <select name="role" class="form-select form-control" required>
-                                <option value="" disabled selected>Select Role</option>
-                                <option value="Admin" <?= (isset($role) && $role === 'admin') ? 'selected' : '' ?>>Admin</option>
-                                <option value="Secretary" <?= (isset($role) && $role === 'secretary') ? 'selected' : '' ?>>Secretary</option>
-                                <option value="User" <?= (isset($role) && $role === 'user') ? 'selected' : '' ?>>User</option>
-                            </select>
+                            <input type="text" readonly disabled id="role" value="<?= $role ?? '' ?>" name="role" class="form-control" placeholder="Role" required>
                         </div>                       
                     </div>
                     <div class="card-body row g-3">
@@ -104,6 +99,21 @@
       </div>
   </div>       
 
+    <!-- Success Modal -->
+<div class="modal fade" id="submissionModal" tabindex="-1" aria-labelledby="submissionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="submissionModalLabel">Success!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="message" class="modal-body">
+        User Account Updated Successfully.
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <script>
     document.getElementById('update-user-form').addEventListener('submit', function(e) {
@@ -119,3 +129,21 @@
     }
     });
 </script>
+
+<?php if (isset($_GET['success'])): ?>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const messageDiv = document.getElementById('message');
+
+    // 2. Set the content (you can use Bootstrap alert styles if you like)
+    messageDiv.innerHTML = `
+      <div class="alert alert-success" role="alert">
+       Your account has been updated successfully!
+      </div>`;
+
+    const modal = new bootstrap.Modal(document.getElementById('submissionModal'));
+    modal.show();
+  });
+</script>
+<?php endif; ?>
